@@ -5,6 +5,7 @@ import { randomUUID } from 'crypto';
 import { ClueDetectionEngine } from '@/utils/conversation/ClueDetectionEngine';
 import { MatrixComparison } from '@/utils/conversation/MatrixComparison';
 import { ConversationFlowManager } from '@/utils/conversation/ConversationFlowManager';
+import { InferentialAnalysisEngine } from '@/utils/conversation/InferentialAnalysisEngine';
 
 const empathicPrelude = `Thanks for sharing your farming thoughts with me. I understand that making decisions about your farm's future can feel complex and challenging. I'm here to help you explore sustainable farming possibilities and understand the deeper patterns in what you've shared.`;
 
@@ -82,6 +83,7 @@ export default async function handler(
     const clueEngine = new ClueDetectionEngine();
     const matrixComparison = new MatrixComparison();
     const flowManager = new ConversationFlowManager();
+    const inferentialEngine = new InferentialAnalysisEngine();
 
     // Load conversation history if provided
     if (conversationHistory && Array.isArray(conversationHistory)) {
@@ -94,14 +96,41 @@ export default async function handler(
     // Analyze current response
     const detectedClues = clueEngine.analyzeResponse(content);
     const matrixAnalysis = matrixComparison.analyzeConversation(content, detectedClues);
-
+    
     // Get conversation insights
     const conversationInsights = clueEngine.getConversationInsights();
     const currentOrientation = matrixComparison.getCurrentOrientation();
+    
+    // Perform comprehensive inferential analysis
+    const comprehensiveAnalysis = inferentialEngine.getComprehensiveAnalysis(
+      content, 
+      conversationHistory?.map(h => h.userInput) || []
+    );
 
     const openai = new OpenAI({ apiKey });
 
-    // Enhanced system prompt with context
+    // Enhanced system prompt with comprehensive philosophical context
+    const philosophicalContext = `
+PHILOSOPHICAL ANALYSIS:
+- Philosophical depth: ${comprehensiveAnalysis.sustainabilityPhilosophy.philosophicalDepth.toFixed(2)}
+- Intellectual curiosity: ${comprehensiveAnalysis.sustainabilityPhilosophy.intellectualCuriosity.toFixed(2)}
+- Systemic thinking: ${comprehensiveAnalysis.sustainabilityPhilosophy.systemicThinking.toFixed(2)}
+- Value conflicts: ${comprehensiveAnalysis.sustainabilityPhilosophy.valueSystem.valueConflicts.map(v => v.tension).join(', ')}
+- Dialectical tensions: ${comprehensiveAnalysis.sustainabilityPhilosophy.dialecticalTensions.length} identified
+- Engagement strategy: ${comprehensiveAnalysis.intellectualEngagementStrategy.level} level, ${comprehensiveAnalysis.intellectualEngagementStrategy.approach} approach
+
+SYSTEMS ANALYSIS:
+- System resilience: ${comprehensiveAnalysis.sesAnalysis.systemResilience.toFixed(2)}
+- Transformation potential: ${comprehensiveAnalysis.sesAnalysis.transformationPotential.toFixed(2)}
+- System stability: ${comprehensiveAnalysis.chaosAnalysis.systemStability.toFixed(2)}
+- Adaptive capacity: ${comprehensiveAnalysis.chaosAnalysis.adaptiveCapacity.toFixed(2)}
+
+RECOMMENDED RESPONSE APPROACH:
+- Use ${comprehensiveAnalysis.intellectualEngagementStrategy.pacing} pacing
+- Apply ${comprehensiveAnalysis.intellectualEngagementStrategy.techniques.join(', ')} techniques
+- Address philosophical challenges: ${comprehensiveAnalysis.philosophicalChallenges.slice(0, 2).map(c => c.challenge).join('; ')}
+- Bridge conceptual gaps: ${comprehensiveAnalysis.conceptualGaps.slice(0, 2).map(g => g.missing).join(', ')}`;
+
     const contextualPrompt = `${systemPrompt}
 
 CONTEXT:
@@ -109,8 +138,9 @@ CONTEXT:
 - Emotional tone: ${conversationInsights.emotionalTone}
 - Engagement level: ${conversationInsights.overallEngagement}
 - Dominant topics: ${conversationInsights.dominantTopics.join(', ')}
+${philosophicalContext}
 
-Tailor your response to match the farmer's orientation and emotional state.`;
+Tailor your response to match the farmer's philosophical development level and create intellectually challenging dialogue that promotes growth.`;
 
     log('debug', `[${requestId}] Calling OpenAI GPT-4o-mini with enhanced context...`);
     const completion = await openai.chat.completions.create({
@@ -151,14 +181,28 @@ Tailor your response to match the farmer's orientation and emotional state.`;
       // Visualization data for the 5 new chart types
       visualizationData,
       // Matrix analysis for deeper insights
-      matrixAnalysis
+      matrixAnalysis,
+      // Comprehensive philosophical and systems analysis
+      comprehensiveAnalysis: {
+        sustainabilityPhilosophy: comprehensiveAnalysis.sustainabilityPhilosophy,
+        philosophicalChallenges: comprehensiveAnalysis.philosophicalChallenges,
+        conceptualGaps: comprehensiveAnalysis.conceptualGaps,
+        sesAnalysis: comprehensiveAnalysis.sesAnalysis,
+        chaosAnalysis: comprehensiveAnalysis.chaosAnalysis,
+        intellectualEngagementStrategy: comprehensiveAnalysis.intellectualEngagementStrategy,
+        philosophicalPrompts: comprehensiveAnalysis.philosophicalPrompts,
+        dialecticalOpportunities: comprehensiveAnalysis.dialecticalOpportunities
+      }
     };
 
     log('info', `[${requestId}] OK`, { 
       ms: Date.now() - t0,
       themesCount: result.themes?.length || 0,
       orientation: currentOrientation,
-      engagement: conversationInsights.overallEngagement
+      engagement: conversationInsights.overallEngagement,
+      philosophicalDepth: comprehensiveAnalysis.sustainabilityPhilosophy.philosophicalDepth,
+      systemResilience: comprehensiveAnalysis.sesAnalysis.systemResilience,
+      dialecticalTensions: comprehensiveAnalysis.sustainabilityPhilosophy.dialecticalTensions.length
     });
 
     return res.status(200).json(result);

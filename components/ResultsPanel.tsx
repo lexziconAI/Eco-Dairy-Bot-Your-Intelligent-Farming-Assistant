@@ -6,6 +6,7 @@ import { LENSES } from '@/utils/lenses';
 import SESCharts from './visuals/SESCharts';
 import ChaosCharts from './visuals/ChaosCharts';
 import BojeCharts from './visuals/BojeCharts';
+import PhilosophicalAnalysisChart from './Charts/PhilosophicalAnalysisChart';
 import SimpleTimelineChart from './Charts/SimpleTimelineChart';
 
 interface ResultsPanelProps {
@@ -39,6 +40,7 @@ export const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, voiceEnable
     SES: <SESCharts results={results} />,
     Chaos: <ChaosCharts results={results} />,
     Boje: <BojeCharts results={results} />,
+    Philosophy: <PhilosophicalAnalysisChart data={results.comprehensiveAnalysis} title="Philosophical & Systems Analysis" />,
   };
 
   const handlePlaySummary = async () => {

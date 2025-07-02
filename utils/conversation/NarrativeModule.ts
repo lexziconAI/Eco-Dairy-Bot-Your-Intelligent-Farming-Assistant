@@ -1,4 +1,5 @@
 import { LivingStory, AnteNarrative, GrandNarrativeConnection } from './PersistedMemory';
+import { DialecticalTension, EmergentNarrative } from './InferentialAnalysisEngine';
 
 export interface BojeAnalysis {
   livingStories: LivingStory[];
@@ -6,6 +7,38 @@ export interface BojeAnalysis {
   grandNarratives: GrandNarrativeConnection[];
   narrativeGaps: NarrativeGap[];
   storyConnections: StoryConnection[];
+  quantumNarratives: QuantumNarrative[];
+  narrativeCoherence: number;
+  storyEvolutionPotential: number;
+}
+
+// Enhanced Quantum Storytelling Framework
+export interface QuantumNarrative {
+  id: string;
+  type: 'superposition' | 'entanglement' | 'collapse' | 'emergence';
+  description: string;
+  alternativePossibilities: string[];
+  observerEffect: string; // How telling the story changes it
+  uncertaintyPrinciple: string; // What can't be precisely known
+  quantumCoherence: number; // 0-1, how well story maintains quantum properties
+  philosophicalImplications: string[];
+}
+
+export interface NarrativeArchetype {
+  name: string;
+  pattern: string;
+  resonance: number; // 0-1, how strongly this archetype appears
+  transformationalPotential: number; // 0-1, capacity for growth
+  shadowElements: string[]; // Hidden or denied aspects
+  giftElements: string[]; // Positive potential
+}
+
+export interface StoryEvolution {
+  currentStage: 'initiation' | 'separation' | 'descent' | 'ordeal' | 'revelation' | 'transformation' | 'return';
+  evolutionDirection: 'progressive' | 'regressive' | 'cyclical' | 'spiral';
+  transformationCatalysts: string[];
+  resistanceFactors: string[];
+  nextStageReadiness: number; // 0-1
 }
 
 export interface NarrativeGap {
@@ -22,6 +55,288 @@ export interface StoryConnection {
 }
 
 export class NarrativeModule {
+  private quantumNarratives: QuantumNarrative[] = [];
+  private narrativeArchetypes: NarrativeArchetype[] = [];
+  private storyEvolution: StoryEvolution | null = null;
+  
+  // Integration with philosophical analysis
+  integrateWithPhilosophicalAnalysis(
+    dialecticalTensions: DialecticalTension[], 
+    emergentNarratives: EmergentNarrative[]
+  ): void {
+    // Transform dialectical tensions into quantum narratives
+    dialecticalTensions.forEach(tension => {
+      this.quantumNarratives.push({
+        id: `quantum_${Date.now()}_${Math.random()}`,
+        type: 'superposition',
+        description: `Farmer exists in superposition between ${tension.thesis} and ${tension.antithesis}`,
+        alternativePossibilities: [tension.thesis, tension.antithesis, tension.currentSynthesis || 'Unknown synthesis'],
+        observerEffect: 'Discussing this tension may cause collapse into one position',
+        uncertaintyPrinciple: 'Cannot simultaneously know exact position on both poles of tension',
+        quantumCoherence: tension.readinessForSynthesis,
+        philosophicalImplications: [
+          'Reality as multiple simultaneous possibilities',
+          'Observer participation in narrative creation',
+          'Complementarity of opposing views'
+        ]
+      });
+    });
+    
+    // Integrate emergent narratives with archetypal patterns
+    emergentNarratives.forEach(narrative => {
+      this.narrativeArchetypes.push(this.identifyArchetype(narrative));
+    });
+  }
+  
+  private identifyArchetype(emergentNarrative: EmergentNarrative): NarrativeArchetype {
+    const archetypeMap = {
+      'becoming': {
+        name: 'The Emerging Farmer',
+        pattern: 'Transformation from traditional to regenerative',
+        shadowElements: ['Fear of change', 'Loss of identity'],
+        giftElements: ['Adaptability', 'Innovation']
+      },
+      'transformation': {
+        name: 'The Alchemical Steward',
+        pattern: 'Transmuting challenges into wisdom',
+        shadowElements: ['Perfectionism', 'Control'],
+        giftElements: ['Resilience', 'Integration']
+      },
+      'resistance': {
+        name: 'The Guardian Keeper',
+        pattern: 'Protecting traditional wisdom',
+        shadowElements: ['Rigidity', 'Fear'],
+        giftElements: ['Stability', 'Preservation']
+      },
+      'integration': {
+        name: 'The Bridge Builder',
+        pattern: 'Synthesizing old and new ways',
+        shadowElements: ['Overwhelm', 'Indecision'],
+        giftElements: ['Balance', 'Wisdom']
+      }
+    };
+    
+    const baseArchetype = archetypeMap[emergentNarrative.type];
+    
+    return {
+      ...baseArchetype,
+      resonance: this.calculateArchetypeResonance(emergentNarrative),
+      transformationalPotential: this.calculateTransformationPotential(emergentNarrative)
+    };
+  }
+  
+  private calculateArchetypeResonance(narrative: EmergentNarrative): number {
+    // Calculate based on story fragment analysis
+    const storyDepth = narrative.storyFragment.length / 100; // Rough measure
+    const developmentStage = {
+      'initiation': 0.3,
+      'struggle': 0.6,
+      'breakthrough': 0.8,
+      'integration': 0.9
+    }[narrative.developmentalStage];
+    
+    return Math.min((storyDepth + developmentStage) / 2, 1);
+  }
+  
+  private calculateTransformationPotential(narrative: EmergentNarrative): number {
+    // Higher potential if multiple future implications
+    const futureRichness = narrative.futureImplications.length / 5;
+    const archetypeResonance = narrative.archetypeResonance.length / 3;
+    
+    return Math.min((futureRichness + archetypeResonance) / 2, 1);
+  }
+  
+  // Quantum narrative analysis methods
+  detectNarrativeSuperposition(text: string): QuantumNarrative | null {
+    const lowerText = text.toLowerCase();
+    
+    // Look for simultaneous contradictory states
+    const contradictionMarkers = [
+      ['excited', 'worried'],
+      ['optimistic', 'concerned'],
+      ['interested', 'hesitant'],
+      ['want', 'afraid'],
+      ['love', 'frustrated']
+    ];
+    
+    const foundContradictions = contradictionMarkers.filter(([pos, neg]) => 
+      lowerText.includes(pos) && lowerText.includes(neg)
+    );
+    
+    if (foundContradictions.length === 0) return null;
+    
+    return {
+      id: `superposition_${Date.now()}`,
+      type: 'superposition',
+      description: `Farmer exists in emotional/conceptual superposition`,
+      alternativePossibilities: foundContradictions.map(([pos, neg]) => 
+        `Both ${pos} and ${neg} simultaneously`
+      ),
+      observerEffect: 'Questioning may force collapse into single emotional state',
+      uncertaintyPrinciple: 'Cannot precisely measure both excitement and worry simultaneously',
+      quantumCoherence: 0.7,
+      philosophicalImplications: [
+        'Emotional complexity as quantum phenomenon',
+        'Multiple valid truth states',
+        'Observer effect in therapeutic dialogue'
+      ]
+    };
+  }
+  
+  detectNarrativeEntanglement(text: string, contextTexts: string[]): QuantumNarrative | null {
+    const lowerText = text.toLowerCase();
+    
+    // Look for connections between distant concepts
+    const entanglementPatterns = [
+      ['family', 'environment'], // Family welfare entangled with environmental health
+      ['profit', 'stewardship'], // Economic and ethical entanglement
+      ['tradition', 'innovation'], // Past and future entangled
+      ['individual', 'community'] // Personal and collective entangled
+    ];
+    
+    const foundEntanglements = entanglementPatterns.filter(([concept1, concept2]) => 
+      lowerText.includes(concept1) && lowerText.includes(concept2)
+    );
+    
+    if (foundEntanglements.length === 0) return null;
+    
+    return {
+      id: `entanglement_${Date.now()}`,
+      type: 'entanglement',
+      description: 'Concepts show quantum entanglement - change in one affects the other instantly',
+      alternativePossibilities: foundEntanglements.map(([c1, c2]) => 
+        `${c1} and ${c2} are quantum entangled`
+      ),
+      observerEffect: 'Focusing on one concept immediately affects perception of entangled concept',
+      uncertaintyPrinciple: 'Cannot isolate entangled concepts without affecting their connection',
+      quantumCoherence: 0.8,
+      philosophicalImplications: [
+        'Non-local connections in farmer worldview',
+        'Holistic thinking as quantum phenomenon',
+        'Action at a distance in value systems'
+      ]
+    };
+  }
+  
+  assessNarrativeEvolution(text: string, conversationHistory: string[]): StoryEvolution {
+    const lowerText = text.toLowerCase();
+    
+    // Determine current stage based on language patterns
+    let currentStage: StoryEvolution['currentStage'] = 'initiation';
+    
+    if (/(question|wonder|explore|curious)/g.test(lowerText)) {
+      currentStage = 'initiation';
+    } else if (/(leaving|different|separate|change)/g.test(lowerText)) {
+      currentStage = 'separation';
+    } else if (/(difficult|challenge|hard|struggle)/g.test(lowerText)) {
+      currentStage = 'descent';
+    } else if (/(crisis|breaking|limit|edge)/g.test(lowerText)) {
+      currentStage = 'ordeal';
+    } else if (/(realize|understand|see|insight)/g.test(lowerText)) {
+      currentStage = 'revelation';
+    } else if (/(transform|change|become|evolve)/g.test(lowerText)) {
+      currentStage = 'transformation';
+    } else if (/(share|teach|give back|community)/g.test(lowerText)) {
+      currentStage = 'return';
+    }
+    
+    // Determine evolution direction
+    let evolutionDirection: StoryEvolution['evolutionDirection'] = 'progressive';
+    if (/(back|return|traditional|old way)/g.test(lowerText)) {
+      evolutionDirection = 'regressive';
+    } else if (/(cycle|season|pattern)/g.test(lowerText)) {
+      evolutionDirection = 'cyclical';
+    } else if (/(spiral|deeper|layer)/g.test(lowerText)) {
+      evolutionDirection = 'spiral';
+    }
+    
+    // Identify catalysts and resistance
+    const transformationCatalysts: string[] = [];
+    const resistanceFactors: string[] = [];
+    
+    if (lowerText.includes('crisis')) transformationCatalysts.push('Crisis event');
+    if (lowerText.includes('mentor') || lowerText.includes('advisor')) transformationCatalysts.push('Guidance');
+    if (lowerText.includes('success') || lowerText.includes('worked')) transformationCatalysts.push('Positive feedback');
+    
+    if (lowerText.includes('fear') || lowerText.includes('afraid')) resistanceFactors.push('Fear');
+    if (lowerText.includes('cost') || lowerText.includes('expensive')) resistanceFactors.push('Economic pressure');
+    if (lowerText.includes('family') || lowerText.includes('tradition')) resistanceFactors.push('Social/cultural expectations');
+    
+    // Calculate readiness for next stage
+    const nextStageReadiness = Math.min(
+      (transformationCatalysts.length * 0.3) + 0.4 - (resistanceFactors.length * 0.2),
+      1
+    );
+    
+    return {
+      currentStage,
+      evolutionDirection,
+      transformationCatalysts,
+      resistanceFactors,
+      nextStageReadiness: Math.max(nextStageReadiness, 0)
+    };
+  }
+  
+  /**
+   * Enhanced analysis with quantum storytelling integration
+   */
+  analyzeWithQuantumStorytelling(
+    text: string, 
+    conversationHistory: string[] = [],
+    dialecticalTensions: DialecticalTension[] = [],
+    emergentNarratives: EmergentNarrative[] = []
+  ): BojeAnalysis {
+    // Integrate philosophical analysis
+    this.integrateWithPhilosophicalAnalysis(dialecticalTensions, emergentNarratives);
+    
+    // Detect quantum narratives
+    const superposition = this.detectNarrativeSuperposition(text);
+    const entanglement = this.detectNarrativeEntanglement(text, conversationHistory);
+    
+    if (superposition) this.quantumNarratives.push(superposition);
+    if (entanglement) this.quantumNarratives.push(entanglement);
+    
+    // Assess story evolution
+    this.storyEvolution = this.assessNarrativeEvolution(text, conversationHistory);
+    
+    // Perform traditional Boje analysis
+    const livingStory = this.extractLivingStory(text);
+    const anteNarrative = this.extractAnteNarrative(text);
+    const grandNarrative = this.identifyGrandNarrative(text);
+    
+    const livingStories = livingStory ? [livingStory] : [];
+    const anteNarratives = anteNarrative ? [anteNarrative] : [];
+    const grandNarratives = grandNarrative ? [grandNarrative] : [];
+    
+    // Calculate narrative metrics
+    const narrativeCoherence = this.calculateNarrativeCoherence(livingStories, anteNarratives, grandNarratives);
+    const storyEvolutionPotential = this.storyEvolution?.nextStageReadiness || 0;
+    
+    return {
+      livingStories,
+      anteNarratives,
+      grandNarratives,
+      narrativeGaps: this.identifyNarrativeGaps(livingStories, anteNarratives, grandNarratives),
+      storyConnections: [],
+      quantumNarratives: this.quantumNarratives,
+      narrativeCoherence,
+      storyEvolutionPotential
+    };
+  }
+  
+  private calculateNarrativeCoherence(
+    livingStories: LivingStory[], 
+    anteNarratives: AnteNarrative[], 
+    grandNarratives: GrandNarrativeConnection[]
+  ): number {
+    const hasLiving = livingStories.length > 0 ? 0.3 : 0;
+    const hasAnte = anteNarratives.length > 0 ? 0.3 : 0;
+    const hasGrand = grandNarratives.length > 0 ? 0.2 : 0;
+    const quantumCoherence = this.quantumNarratives.reduce((sum, qn) => sum + qn.quantumCoherence, 0) / 
+                           (this.quantumNarratives.length || 1) * 0.2;
+    
+    return hasLiving + hasAnte + hasGrand + quantumCoherence;
+  }
   
   /**
    * Extract Living Stories from conversation text

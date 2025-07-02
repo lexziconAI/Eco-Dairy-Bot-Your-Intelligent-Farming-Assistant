@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type Lens = 'SES' | 'Chaos' | 'Boje';
+export type Lens = 'SES' | 'Chaos' | 'Boje' | 'Philosophy';
 
 interface LensState {
   lens: Lens;

@@ -30,6 +30,13 @@ export interface BojeMetric {
   livingStory: number;
 }
 
+export interface PhilosophyMetric {
+  metric: string;
+  philosophicalDepth: number;
+  dialecticalTension: number;
+  valueCoherence: number;
+}
+
 export const LENSES: Record<Lens, LensConfig> = {
   SES: {
     emoji: '🌱',
@@ -55,6 +62,14 @@ export const LENSES: Record<Lens, LensConfig> = {
     primaryColor: '#F6C177',
     secondaryColor: '#FFD3A5',
   },
+  Philosophy: {
+    emoji: '🧠',
+    color: 'philosophyBlue',
+    title: 'Philosophical Analysis',
+    description: 'Deep worldview, values, and dialectical thinking patterns',
+    primaryColor: '#4F46E5',
+    secondaryColor: '#A5B4FC',
+  },
 };
 
 // Helper function to format metric names
@@ -68,7 +83,8 @@ export const formatMetricName = (name: string): string => {
 export function transformMetricsForLens(series: Record<string, number[]>, lens: 'SES'): SESMetric[];
 export function transformMetricsForLens(series: Record<string, number[]>, lens: 'Chaos'): ChaosMetric[];
 export function transformMetricsForLens(series: Record<string, number[]>, lens: 'Boje'): BojeMetric[];
-export function transformMetricsForLens(series: Record<string, number[]>, lens: Lens): SESMetric[] | ChaosMetric[] | BojeMetric[];
+export function transformMetricsForLens(series: Record<string, number[]>, lens: 'Philosophy'): PhilosophyMetric[];
+export function transformMetricsForLens(series: Record<string, number[]>, lens: Lens): SESMetric[] | ChaosMetric[] | BojeMetric[] | PhilosophyMetric[];
 export function transformMetricsForLens(series: Record<string, number[]>, lens: Lens) {
   // Guard against null/undefined series
   if (!series || typeof series !== 'object') {
@@ -111,6 +127,17 @@ export function transformMetricsForLens(series: Record<string, number[]>, lens: 
         antenarrative: values.slice(0, 10).reduce((a, b) => a + b, 0) / 10,
         grandNarrative: values.slice(10, 20).reduce((a, b) => a + b, 0) / 10,
         livingStory: values.slice(20, 30).reduce((a, b) => a + b, 0) / 10,
+      }));
+      
+    case 'Philosophy':
+      return entries.map(([key, values]) => ({
+        metric: formatMetricName(key),
+        philosophicalDepth: values.reduce((a, b) => a + b, 0) / values.length,
+        dialecticalTension: Math.max(...values) - Math.min(...values), // Range indicates tension
+        valueCoherence: 1 - (values.reduce((acc, val, i, arr) => {
+          if (i === 0) return 0;
+          return acc + Math.abs(val - arr[i - 1]);
+        }, 0) / values.length), // Inverse of variability
       }));
       
     default:
