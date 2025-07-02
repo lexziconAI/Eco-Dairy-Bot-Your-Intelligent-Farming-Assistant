@@ -58,15 +58,30 @@ export interface AnalysisResult {
   };
   visualizationData?: any;
   matrixAnalysis?: any;
+  comprehensiveAnalysis?: any; // New comprehensive philosophical analysis
 }
 
-export async function analyzeText(text: string): Promise<AnalysisResult> {
+export async function analyzeText(
+  text: string, 
+  options?: {
+    conversationHistory?: Array<{
+      userInput: string;
+      timestamp: number;
+      detectedTopics?: string[];
+    }>;
+    sessionId?: string;
+  }
+): Promise<AnalysisResult> {
   const response = await fetch('/api/analyze', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ text }),
+    body: JSON.stringify({ 
+      text, 
+      sessionId: options?.sessionId,
+      conversationHistory: options?.conversationHistory
+    }),
   });
 
   if (!response.ok) {

@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Layout } from '@/components/Layout';
-import { BrainDumpPanel } from '@/components/BrainDumpPanel';
+import { ConversationPanel } from '@/components/ConversationPanel';
 import { ResultsPanel } from '@/components/ResultsPanel';
 import { HistoryDrawer, HistoryEntry } from '@/components/HistoryDrawer';
 import { analyzeText, AnalysisResult } from '@/utils/api';
 import { LensSelector } from '@/components/LensSelector';
+
+interface Message {
+  id: string;
+  type: 'user' | 'bot';
+  content: string;
+  timestamp: number;
+}
 
 export default function Home() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -38,15 +45,32 @@ export default function Home() {
     localStorage.setItem('eco-dairy-bot-history', JSON.stringify(limitedHistory));
   };
 
-  const handleAnalyze = async (text: string) => {
+  const handleAnalyze = async (conversationHistory: Message[]) => {
     setIsAnalyzing(true);
     try {
-      const analysisResult = await analyzeText(text);
+      // Combine all user messages for analysis
+      const userMessages = conversationHistory.filter(msg => msg.type === 'user');
+      const combinedText = userMessages.map(msg => msg.content).join(' ');
+      
+      if (!combinedText.trim()) {
+        alert('No conversation content to analyze.');
+        return;
+      }
+      
+      // Pass conversation context to analysis
+      const analysisResult = await analyzeText(combinedText, {
+        conversationHistory: userMessages.map(msg => ({
+          userInput: msg.content,
+          timestamp: msg.timestamp,
+          detectedTopics: [] // Will be populated by analysis
+        }))
+      });
+      
       setResults(analysisResult);
       
       const newEntry: HistoryEntry = {
         id: Date.now().toString(),
-        text,
+        text: `Conversation Analysis (${userMessages.length} messages)`,
         themes: analysisResult.themes,
         timestamp: new Date(),
       };
@@ -54,7 +78,7 @@ export default function Home() {
       saveHistory([newEntry, ...history]);
     } catch (error) {
       console.error('Analysis error:', error);
-      alert('Failed to analyze text. Please try again.');
+      alert('Failed to analyze conversation. Please try again.');
     } finally {
       setIsAnalyzing(false);
     }
@@ -62,7 +86,8 @@ export default function Home() {
 
   const handleHistorySelect = (entry: HistoryEntry) => {
     setIsHistoryOpen(false);
-    handleAnalyze(entry.text);
+    // For now, just close the history - in the future we could reload conversation
+    // handleAnalyze(entry.text);
   };
 
   const handleVoiceToggle = () => {
@@ -90,35 +115,21 @@ export default function Home() {
       onShowApiErrors={() => setShowApiErrorModal(true)}
     >
       <LensSelector />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="lg:sticky lg:top-24 lg:h-fit space-y-6">
-          <BrainDumpPanel 
-            onAnalyze={handleAnalyze} 
-            isAnalyzing={isAnalyzing} 
-            onApiError={handleApiError}
-          />
-          
-          {/* Help & Tips Section */}
-          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-            <h3 className="text-lg font-semibold text-blue-800 mb-2">💡 Tips</h3>
-            <ul className="text-sm text-blue-700 space-y-1">
-              <li>• Use voice recording for hands-free brain dumping</li>
-              <li>• Type directly if voice isn't available</li>
-              <li>• Use the "Play Summary" button to hear the AI's interpretation in Antoni's voice</li>
-              <li>• Toggle Voice Output off if you'd rather read the summary</li>
-              <li>• Check your history for previous analyses</li>
-              <li>• Enable verbose logs by adding ?debug to the URL or setting LOG_LEVEL=debug in Dev-Tools → Application → Local Storage → eco_dairy_bot_log_level</li>
-            </ul>
-          </div>
-        </div>
+      <div className="space-y-6">
+        <ConversationPanel 
+          onAnalyze={handleAnalyze} 
+          isAnalyzing={isAnalyzing} 
+          onApiError={handleApiError}
+          voiceEnabled={voiceEnabled}
+        />
         
-        <div>
+        {results && (
           <ResultsPanel 
             results={results} 
             voiceEnabled={voiceEnabled} 
             onApiError={handleApiError}
           />
-        </div>
+        )}
       </div>
       
       <HistoryDrawer

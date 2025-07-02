@@ -104,7 +104,7 @@ export default async function handler(
     // Perform comprehensive inferential analysis
     const comprehensiveAnalysis = inferentialEngine.getComprehensiveAnalysis(
       content, 
-      conversationHistory?.map(h => h.userInput) || []
+      conversationHistory?.map((h: any) => h.userInput) || []
     );
 
     const openai = new OpenAI({ apiKey });

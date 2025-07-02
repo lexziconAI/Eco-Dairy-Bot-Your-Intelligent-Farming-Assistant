@@ -508,7 +508,10 @@ export class NarrativeModule {
       anteNarratives,
       grandNarratives,
       narrativeGaps: gaps,
-      storyConnections: connections
+      storyConnections: connections,
+      quantumNarratives: this.quantumNarratives,
+      narrativeCoherence: this.calculateNarrativeCoherence(livingStories, anteNarratives, grandNarratives),
+      storyEvolutionPotential: this.storyEvolution?.nextStageReadiness || 0
     };
   }
 
@@ -711,5 +714,82 @@ export class NarrativeModule {
     }
 
     return null;
+  }
+
+  // Missing method implementations for backward compatibility
+  private extractAnteNarrative(text: string): AnteNarrative | null {
+    const lowerText = text.toLowerCase();
+    
+    // Look for future-oriented or aspirational language
+    const anteMarkers = [
+      'want to', 'hope to', 'planning', 'thinking about', 'considering',
+      'might try', 'could', 'maybe', 'someday', 'eventually'
+    ];
+    
+    const hasAnteMarker = anteMarkers.some(marker => lowerText.includes(marker));
+    if (!hasAnteMarker) return null;
+    
+    return {
+      id: `ante_${Date.now()}`,
+      aspiration: text.slice(0, 200),
+      timeframe: 'future',
+      feasibility: 0.5,
+      timestamp: Date.now()
+    };
+  }
+  
+  private identifyGrandNarrative(text: string): GrandNarrativeConnection | null {
+    const lowerText = text.toLowerCase();
+    
+    // Look for connections to larger narratives
+    const grandMarkers = [
+      'agriculture', 'farming industry', 'food system', 'climate change',
+      'sustainability', 'future of farming', 'next generation'
+    ];
+    
+    const hasGrandMarker = grandMarkers.some(marker => lowerText.includes(marker));
+    if (!hasGrandMarker) return null;
+    
+    return {
+      id: `grand_${Date.now()}`,
+      theme: 'sustainable agriculture',
+      universalTruth: 'Farming is essential for human survival and environmental stewardship',
+      applicability: 'universal' as const,
+      timestamp: Date.now()
+    };
+  }
+  
+  private identifyNarrativeGaps(
+    livingStories: LivingStory[], 
+    anteNarratives: AnteNarrative[], 
+    grandNarratives: GrandNarrativeConnection[]
+  ): NarrativeGap[] {
+    const gaps: NarrativeGap[] = [];
+    
+    if (livingStories.length === 0) {
+      gaps.push({
+        type: 'missing_living',
+        description: 'No concrete experiences shared yet',
+        suggestedPrompt: 'Can you share a specific experience from your farm?'
+      });
+    }
+    
+    if (anteNarratives.length === 0) {
+      gaps.push({
+        type: 'weak_ante',
+        description: 'No future aspirations identified',
+        suggestedPrompt: 'What changes are you considering for your farm?'
+      });
+    }
+    
+    if (grandNarratives.length === 0) {
+      gaps.push({
+        type: 'disconnected_grand',
+        description: 'Not connected to larger farming narratives',
+        suggestedPrompt: 'How do you see your farm fitting into the bigger picture of agriculture?'
+      });
+    }
+    
+    return gaps;
   }
 }
