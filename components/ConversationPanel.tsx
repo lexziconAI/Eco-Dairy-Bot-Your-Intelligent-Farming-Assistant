@@ -436,17 +436,21 @@ Provide a thoughtful, engaging response that continues this dairy farming conver
 
     try {
       setTranscriptionError(null);
+      console.log('Starting transcription...', { audioSize: audioBlob.size, audioType: audioBlob.type });
       const transcript = await transcribeAudio(audioBlob);
+      console.log('Transcription successful:', transcript);
       setCurrentInput(transcript);
       setAudioBlob(null);
     } catch (error) {
+      console.error('Transcription error details:', error);
       setTranscriptionError(error);
       if (onApiError) onApiError(error);
       
       if (isApiAuthError(error)) {
         alert('Voice transcription unavailable – OpenAI API key not configured in Vercel.');
       } else {
-        alert('Transcription failed. Please try again or type your message.');
+        const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+        alert(`Transcription failed: ${errorMsg}. Please try again or type your message.`);
       }
     }
   };
