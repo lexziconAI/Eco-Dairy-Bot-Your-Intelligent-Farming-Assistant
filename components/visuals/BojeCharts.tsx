@@ -8,7 +8,7 @@ interface BojeChartsProps {
 }
 
 export default function BojeCharts({ results }: BojeChartsProps) {
-  const bojeData = transformMetricsForLens(results.series, 'Boje');
+  const bojeData = transformMetricsForLens(results?.series || {}, 'Boje');
   
   // Create narrative flow data (Sankey-like representation)
   const narrativeFlowData = bojeData.map((item, index) => ({

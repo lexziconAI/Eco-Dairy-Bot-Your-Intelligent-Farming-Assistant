@@ -70,6 +70,11 @@ export function transformMetricsForLens(series: Record<string, number[]>, lens: 
 export function transformMetricsForLens(series: Record<string, number[]>, lens: 'Boje'): BojeMetric[];
 export function transformMetricsForLens(series: Record<string, number[]>, lens: Lens): SESMetric[] | ChaosMetric[] | BojeMetric[];
 export function transformMetricsForLens(series: Record<string, number[]>, lens: Lens) {
+  // Guard against null/undefined series
+  if (!series || typeof series !== 'object') {
+    return [];
+  }
+  
   const entries = Object.entries(series);
   
   switch (lens) {
