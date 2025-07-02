@@ -376,32 +376,29 @@ Provide a thoughtful, engaging response that continues this dairy farming conver
 
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
+      const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
           autoGainControl: true,
-          sampleRate: 44100
-        } 
+          sampleRate: 16000 // OpenAI Whisper works well with 16kHz
+        }
       });
-      
-      // Use WebM if supported, fallback to default
+
+      // Prioritize formats that OpenAI accepts
       const options: MediaRecorderOptions = {};
-      let selectedMimeType = 'audio/webm';
       
+      // Try formats in order of preference for OpenAI
       if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
         options.mimeType = 'audio/webm;codecs=opus';
-        selectedMimeType = 'audio/webm;codecs=opus';
       } else if (MediaRecorder.isTypeSupported('audio/webm')) {
         options.mimeType = 'audio/webm';
-        selectedMimeType = 'audio/webm';
-      } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
-        options.mimeType = 'audio/mp4';
-        selectedMimeType = 'audio/mp4';
+      } else if (MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) {
+        options.mimeType = 'audio/ogg;codecs=opus';
       }
-      
-      console.log('Recording with MIME type:', selectedMimeType);
-      
+
+      console.log('Recording with options:', options);
+
       const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
@@ -413,16 +410,17 @@ Provide a thoughtful, engaging response that continues this dairy farming conver
       };
 
       mediaRecorder.onstop = async () => {
-        const mimeType = mediaRecorder.mimeType || selectedMimeType;
-        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
-        console.log('Audio recorded:', { 
-          size: audioBlob.size, 
-          type: audioBlob.type,
-          mimeType: mimeType 
+        const audioBlob = new Blob(audioChunksRef.current, { 
+          type: mediaRecorder.mimeType || 'audio/webm' 
         });
-        setAudioBlob(audioBlob);
         
-        // Stop all tracks to release the microphone
+        console.log('Recording complete:', {
+          size: audioBlob.size,
+          type: audioBlob.type,
+          duration: audioChunksRef.current.length
+        });
+        
+        setAudioBlob(audioBlob);
         stream.getTracks().forEach(track => track.stop());
       };
 
