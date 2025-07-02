@@ -62,21 +62,36 @@ export default async function handler(
     const audioBuffer = Buffer.from(base64Data, 'base64');
     log('debug', `[${requestId}] Audio buffer created`, { bufferSize: audioBuffer.length });
 
-    // Create FormData for OpenAI Whisper API
-    const form = new FormData();
-    form.append('file', new Blob([audioBuffer], { type: 'audio/wav' }), 'audio.wav');
-    form.append('model', 'whisper-1');
-    form.append('language', 'en'); // Optimize for English
-    form.append('prompt', 'This is a conversation about dairy farming, agriculture, sustainability, and farm management.');
-
     log('debug', `[${requestId}] Calling OpenAI Whisper API...`);
+    
+    // Create proper multipart form data manually
+    const boundary = '----WebKitFormBoundary' + Math.random().toString(36).substring(2);
+    const formData = [
+      `--${boundary}`,
+      'Content-Disposition: form-data; name="file"; filename="audio.wav"',
+      'Content-Type: audio/wav',
+      '',
+      audioBuffer.toString('binary'),
+      `--${boundary}`,
+      'Content-Disposition: form-data; name="model"',
+      '',
+      'whisper-1',
+      `--${boundary}`,
+      'Content-Disposition: form-data; name="language"',
+      '',
+      'en',
+      `--${boundary}--`,
+      ''
+    ].join('\r\n');
     
     const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': `multipart/form-data; boundary=${boundary}`,
+        'Content-Length': Buffer.byteLength(formData, 'binary').toString()
       },
-      body: form
+      body: Buffer.from(formData, 'binary')
     });
 
     if (!response.ok) {
