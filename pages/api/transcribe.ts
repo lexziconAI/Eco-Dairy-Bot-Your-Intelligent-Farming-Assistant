@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import FormData from 'form-data';
 import { log } from '@/utils/logger';
 import { randomUUID } from 'crypto';
 
@@ -65,10 +64,7 @@ export default async function handler(
 
     // Create FormData for OpenAI Whisper API
     const form = new FormData();
-    form.append('file', audioBuffer, { 
-      filename: 'audio.wav', 
-      contentType: 'audio/wav' 
-    });
+    form.append('file', new Blob([audioBuffer], { type: 'audio/wav' }), 'audio.wav');
     form.append('model', 'whisper-1');
     form.append('language', 'en'); // Optimize for English
     form.append('prompt', 'This is a conversation about dairy farming, agriculture, sustainability, and farm management.');
@@ -78,8 +74,7 @@ export default async function handler(
     const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        ...form.getHeaders()
+        'Authorization': `Bearer ${apiKey}`
       },
       body: form
     });
