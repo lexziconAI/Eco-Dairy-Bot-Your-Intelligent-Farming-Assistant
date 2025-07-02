@@ -5,23 +5,40 @@ import {
 } from 'lucide-react';
 import { transcribeAudio, analyzeText, isApiAuthError, generateSpeech } from '@/utils/api';
 import { useDebug } from '@/hooks/useDebug';
+import { VoicePlayer } from '@/components/VoicePlayer';
 
 // Component to render formatted message content
 const FormattedMessage: React.FC<{ content: string }> = ({ content }) => {
   // Convert various markdown-style formatting to HTML
   const formatContent = (text: string) => {
     return text
+      // Convert double line breaks to paragraphs
+      .replace(/\n\n+/g, '</p><p>')
+      // Convert single line breaks to <br>
+      .replace(/\n/g, '<br>')
       // Bold text **text** -> <strong>text</strong>
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      // Bullet points • or - -> proper bullets
-      .replace(/^[•\-]\s+/gm, '• ')
-      // Line breaks
-      .replace(/<br\s*\/?>/gi, '<br />')
-      // Preserve existing HTML
+      // Handle bullet points with proper line breaks
+      .replace(/^[•\-]\s+(.+)$/gm, '<div class="bullet-point">• $1</div>')
+      // Handle numbered lists with proper line breaks
+      .replace(/^(\d+\.)\s+(.+)$/gm, '<div class="numbered-point"><strong>$1</strong> $2</div>')
+      // Wrap in paragraph tags
+      .replace(/^(.)/gm, '<p>$1')
+      .replace(/(.+)$/gm, '$1</p>')
+      // Clean up multiple paragraph tags
+      .replace(/<\/p><p>/g, '</p>\n<p>')
+      // Handle existing HTML
       .replace(/&lt;/g, '<')
       .replace(/&gt;/g, '>')
-      // Handle numbered lists
-      .replace(/^(\d+\.)\s+/gm, '<strong>$1</strong> ');
+      // Clean up empty paragraphs
+      .replace(/<p><\/p>/g, '')
+      // Fix bullet points that got wrapped in paragraphs
+      .replace(/<p><div class="bullet-point">/g, '<div class="bullet-point">')
+      .replace(/<\/div><\/p>/g, '</div>')
+      .replace(/<p><div class="numbered-point">/g, '<div class="numbered-point">')
+      // Ensure proper spacing around bullet points
+      .replace(/(<div class="bullet-point">.*?<\/div>)/g, '\n$1\n')
+      .replace(/(<div class="numbered-point">.*?<\/div>)/g, '\n$1\n');
   };
 
   return (
@@ -514,6 +531,18 @@ Provide a thoughtful, engaging response that continues this dairy farming conver
               <div className="prose prose-sm max-w-none">
                 <FormattedMessage content={msg.content} />
               </div>
+              
+              {/* Voice Player for bot messages */}
+              {msg.type === 'bot' && voiceEnabled && (
+                <div className="mt-3 pt-3 border-t border-blue-200 flex justify-end">
+                  <VoicePlayer 
+                    text={msg.content}
+                    size="sm"
+                    variant="secondary"
+                    onError={onApiError}
+                  />
+                </div>
+              )}
             </div>
           </div>
         ))}

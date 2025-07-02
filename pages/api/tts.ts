@@ -3,7 +3,7 @@ import axios from 'axios';
 import { log } from '@/utils/logger';
 import { randomUUID } from 'crypto';
 
-const ANTONI_VOICE_ID = 'EXAVITQu4vr4xnSDxMaL';
+const ANTONIA_VOICE_ID = '3z9q8Y7plHbvhDZehEII';
 
 export const config = {
   api: {
@@ -56,7 +56,7 @@ export default async function handler(
 
     log('info', `[${requestId}] Generating speech`, { 
       textLength: text.length, 
-      voiceId: ANTONI_VOICE_ID,
+      voiceId: ANTONIA_VOICE_ID,
       ip: req.headers['x-forwarded-for']
     });
 
@@ -71,7 +71,7 @@ export default async function handler(
 
     log('debug', `[${requestId}] Calling ElevenLabs TTS API...`);
     const resp = await axios.post(
-      `https://api.elevenlabs.io/v1/text-to-speech/${ANTONI_VOICE_ID}`,
+      `https://api.elevenlabs.io/v1/text-to-speech/${ANTONIA_VOICE_ID}`,
       payload,
       {
         headers: {

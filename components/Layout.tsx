@@ -20,12 +20,14 @@ export const Layout: React.FC<LayoutProps> = ({
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="fixed top-0 left-0 right-0 bg-white shadow-md z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <h1 className="text-xl sm:text-2xl font-bold text-purple-600">
-              Eco Dairy Bot – Your Intelligent Farming Assistant
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+          <div className="flex justify-between items-center h-16 gap-2">
+            <h1 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold text-green-800 leading-tight">
+              <span className="block sm:inline">Eco Dairy Bot</span>
+              <span className="hidden sm:inline"> – </span>
+              <span className="block sm:inline text-xs sm:text-sm md:text-base lg:text-lg">Your Intelligent Farming Assistant</span>
             </h1>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
               {/* API Error Warning */}
               {hasApiErrors && onShowApiErrors && (
                 <button

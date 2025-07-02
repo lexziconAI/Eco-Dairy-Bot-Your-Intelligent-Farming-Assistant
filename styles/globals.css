@@ -125,10 +125,40 @@
 }
 
 .formatted-message p {
-  @apply mb-2 last:mb-0;
+  @apply mb-3 last:mb-0;
 }
 
 /* Bullet points styling */
+.formatted-message .bullet-point {
+  @apply mb-3 pl-0 flex items-start;
+  line-height: 1.6;
+  margin-left: 0.5rem;
+}
+
+.formatted-message .bullet-point:last-child {
+  @apply mb-0;
+}
+
+.formatted-message .bullet-point:first-child {
+  @apply mt-2;
+}
+
+/* Numbered list styling */
+.formatted-message .numbered-point {
+  @apply mb-3 pl-0 flex items-start;
+  line-height: 1.6;
+  margin-left: 0.5rem;
+}
+
+.formatted-message .numbered-point:last-child {
+  @apply mb-0;
+}
+
+.formatted-message .numbered-point:first-child {
+  @apply mt-2;
+}
+
+/* Legacy bullet support */
 .formatted-message ul {
   @apply list-none pl-0 space-y-1;
 }
