@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import axios from 'axios';
 import FormData from 'form-data';
 import { log } from '@/utils/logger';
 import { randomUUID } from 'crypto';
@@ -7,7 +6,7 @@ import { randomUUID } from 'crypto';
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '10mb',
+      sizeLimit: '25mb', // Increased for audio files
     },
   },
 };
@@ -34,14 +33,14 @@ export default async function handler(
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const apiKey = process.env.ELEVENLABS_API_KEY;
-  log('debug', `[${requestId}] API key present:`, !!apiKey);
+  const apiKey = process.env.OPENAI_API_KEY;
+  log('debug', `[${requestId}] OpenAI API key present:`, !!apiKey);
   
   if (!apiKey) {
-    log('error', `[${requestId}] ElevenLabs API key not configured`);
+    log('error', `[${requestId}] OpenAI API key not configured`);
     return res.status(503).json({ 
-      code: 'NO_ELEVEN_KEY',
-      message: 'ElevenLabs API key not configured' 
+      code: 'NO_OPENAI_KEY',
+      message: 'OpenAI API key not configured' 
     });
   }
 
@@ -54,60 +53,82 @@ export default async function handler(
       return res.status(400).json({ error: 'No audio data provided' });
     }
 
-    log('info', `[${requestId}] Processing audio`, { 
+    log('info', `[${requestId}] Processing audio with OpenAI Whisper`, { 
       payloadSize: base64Audio.length, 
       ip: req.headers['x-forwarded-for'] 
     });
     
-    const base64Data = base64Audio.replace(/^data:audio\/\w+;base64,/, '');
+    // Extract the base64 data and convert to buffer
+    const base64Data = base64Audio.replace(/^data:audio\/[^;]+;base64,/, '');
     const audioBuffer = Buffer.from(base64Data, 'base64');
     log('debug', `[${requestId}] Audio buffer created`, { bufferSize: audioBuffer.length });
 
+    // Create FormData for OpenAI Whisper API
     const form = new FormData();
     form.append('file', audioBuffer, { 
-      filename: 'audio.webm', 
-      contentType: 'audio/webm' 
+      filename: 'audio.wav', 
+      contentType: 'audio/wav' 
     });
-    form.append('model_id', 'scribe_v1');
+    form.append('model', 'whisper-1');
+    form.append('language', 'en'); // Optimize for English
+    form.append('prompt', 'This is a conversation about dairy farming, agriculture, sustainability, and farm management.');
 
-    log('debug', `[${requestId}] Calling ElevenLabs STT API...`);
-    const resp = await axios.post(
-      'https://api.elevenlabs.io/v1/speech-to-text',
-      form,
-      {
-        headers: {
-          'xi-api-key': apiKey,
-          ...form.getHeaders()
-        },
-        maxBodyLength: Infinity,
-        maxContentLength: Infinity,
+    log('debug', `[${requestId}] Calling OpenAI Whisper API...`);
+    
+    const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        ...form.getHeaders()
+      },
+      body: form
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      log('error', `[${requestId}] OpenAI API error`, {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorText
+      });
+      
+      if (response.status === 401) {
+        return res.status(401).json({
+          code: 'BAD_API_KEY',
+          message: 'OpenAI API key is invalid'
+        });
       }
-    );
+      
+      throw new Error(`OpenAI API error: ${response.status} ${response.statusText}`);
+    }
+
+    const result = await response.json();
+    const transcript = result.text || '';
 
     log('info', `[${requestId}] OK`, { 
       ms: Date.now() - t0, 
-      textLength: resp.data.text?.length || 0 
+      textLength: transcript.length 
     });
-    return res.status(200).json({ transcript: resp.data.text });
+    
+    return res.status(200).json({ transcript });
+    
   } catch (error: any) {
     log('error', `[${requestId}] ERR`, {
       message: error.message,
-      status: error.response?.status,
-      data: error.response?.data,
       ms: Date.now() - t0
     });
     
     // Handle authentication errors specifically
-    if (error.response?.status === 401 || error.response?.status === 403) {
+    if (error.message?.includes('401') || error.message?.includes('Unauthorized')) {
       return res.status(401).json({
         code: 'BAD_API_KEY',
-        message: 'Upstream rejected API key'
+        message: 'OpenAI API key rejected'
       });
     }
     
     return res.status(500).json({ 
       error: error.message || 'Failed to transcribe audio',
-      details: error.response?.data || error.message 
+      details: error.message 
     });
   }
 }
