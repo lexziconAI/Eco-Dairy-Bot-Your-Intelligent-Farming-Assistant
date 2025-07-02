@@ -74,4 +74,4 @@ Debug logs include:
 - API request tracking with unique requestIds
 - Frontend component state changes
 - Performance timings
-- Error details with upstream responses
+- Error details with upstream responses# Updated OpenAI API key - Wed Jul  2 14:20:05 NZST 2025
