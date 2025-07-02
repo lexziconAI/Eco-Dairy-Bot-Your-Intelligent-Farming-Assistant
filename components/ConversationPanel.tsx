@@ -387,11 +387,20 @@ Provide a thoughtful, engaging response that continues this dairy farming conver
       
       // Use WebM if supported, fallback to default
       const options: MediaRecorderOptions = {};
+      let selectedMimeType = 'audio/webm';
+      
       if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
         options.mimeType = 'audio/webm;codecs=opus';
+        selectedMimeType = 'audio/webm;codecs=opus';
+      } else if (MediaRecorder.isTypeSupported('audio/webm')) {
+        options.mimeType = 'audio/webm';
+        selectedMimeType = 'audio/webm';
       } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
         options.mimeType = 'audio/mp4';
+        selectedMimeType = 'audio/mp4';
       }
+      
+      console.log('Recording with MIME type:', selectedMimeType);
       
       const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
@@ -404,8 +413,13 @@ Provide a thoughtful, engaging response that continues this dairy farming conver
       };
 
       mediaRecorder.onstop = async () => {
-        const mimeType = mediaRecorder.mimeType || 'audio/wav';
+        const mimeType = mediaRecorder.mimeType || selectedMimeType;
         const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
+        console.log('Audio recorded:', { 
+          size: audioBlob.size, 
+          type: audioBlob.type,
+          mimeType: mimeType 
+        });
         setAudioBlob(audioBlob);
         
         // Stop all tracks to release the microphone
