@@ -89,14 +89,11 @@ export const ConversationPanel: React.FC<ConversationPanelProps> = ({
   const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
   
   // Voice/Audio state
-  const [isListening, setIsListening] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [speechSupported, setSpeechSupported] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [transcriptionError, setTranscriptionError] = useState<any>(null);
   
   // Refs
-  const recognitionRef = useRef<any>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -117,12 +114,10 @@ export const ConversationPanel: React.FC<ConversationPanelProps> = ({
     userMessages: conversation.filter(m => m.type === 'user').length,
     isThinking,
     isRecording,
-    isListening,
     hasAudioBlob: !!audioBlob,
-    speechSupported,
     currentConversationId,
     historyCount: conversationHistory.length
-  }, [conversation, isThinking, isRecording, isListening, audioBlob, speechSupported, currentConversationId, conversationHistory]);
+  }, [conversation, isThinking, isRecording, audioBlob, currentConversationId, conversationHistory]);
 
   useEffect(() => {
     // Load conversation history from localStorage
@@ -145,30 +140,6 @@ export const ConversationPanel: React.FC<ConversationPanelProps> = ({
       timestamp: Date.now()
     }]);
 
-    // Setup speech recognition
-    if (typeof window !== 'undefined' && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-      setSpeechSupported(true);
-      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-      recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = true;
-      recognitionRef.current.interimResults = true;
-      recognitionRef.current.lang = 'en-US';
-      
-      recognitionRef.current.onresult = (event: any) => {
-        let finalTranscript = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          if (event.results[i].isFinal) {
-            finalTranscript += event.results[i][0].transcript;
-          }
-        }
-        if (finalTranscript) {
-          setCurrentInput(prev => (prev + ' ' + finalTranscript).trim());
-        }
-      };
-      
-      recognitionRef.current.onend = () => setIsListening(false);
-      recognitionRef.current.onerror = () => setIsListening(false);
-    }
   }, []);
 
   useEffect(() => {
@@ -402,24 +373,6 @@ Provide a thoughtful, engaging response that continues this dairy farming conver
     onAnalyze(conversation);
   };
 
-  const toggleListening = () => {
-    if (!speechSupported) {
-      alert('Speech recognition requires Chrome, Edge, or Safari');
-      return;
-    }
-    
-    if (isListening) {
-      recognitionRef.current?.stop();
-    } else {
-      try {
-        recognitionRef.current?.start();
-        setIsListening(true);
-      } catch (error) {
-        console.error('Speech recognition error:', error);
-        alert('Speech recognition failed. Please try typing instead.');
-      }
-    }
-  };
 
   const startRecording = async () => {
     try {
@@ -491,7 +444,7 @@ Provide a thoughtful, engaging response that continues this dairy farming conver
       if (onApiError) onApiError(error);
       
       if (isApiAuthError(error)) {
-        alert('Voice transcription unavailable – API key issue.');
+        alert('Voice transcription unavailable – OpenAI API key not configured in Vercel.');
       } else {
         alert('Transcription failed. Please try again or type your message.');
       }
@@ -599,31 +552,17 @@ Provide a thoughtful, engaging response that continues this dairy farming conver
           </div>
           
           <div className="flex flex-col space-y-2">
-            {voiceEnabled && speechSupported && (
-              <button
-                onClick={toggleListening}
-                className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                  isListening 
-                    ? 'bg-red-500 hover:bg-red-600 text-white' 
-                    : 'bg-blue-500 hover:bg-blue-600 text-white'
-                }`}
-                title={isListening ? 'Stop listening' : 'Start voice input'}
-              >
-                {isListening ? <MicOff size={20} /> : <Mic size={20} />}
-              </button>
-            )}
-            
             {voiceEnabled && (
               <button
                 onClick={isRecording ? stopRecording : startRecording}
                 className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
                   isRecording 
                     ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' 
-                    : 'bg-purple-500 hover:bg-purple-600 text-white'
+                    : 'bg-blue-500 hover:bg-blue-600 text-white'
                 }`}
-                title={isRecording ? 'Stop recording' : 'Record audio'}
+                title={isRecording ? 'Stop recording' : 'Record audio (OpenAI Whisper)'}
               >
-                <Mic size={20} />
+                {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
               </button>
             )}
           </div>
