@@ -11,25 +11,56 @@ const empathicPrelude = `Thanks for sharing your farming thoughts with me. I und
 
 const systemPrompt = `${empathicPrelude}
 
-You are an intelligent dairy farming assistant. Analyze the farmer's input for dairy-specific themes and provide practical insights. Return JSON:
+You are an advanced dairy farming analyst with deep expertise in inferential analysis, systems thinking, and farmer psychology. Your task is to analyze the farmer's conversation and infer meaningful data patterns for visualization.
+
+CRITICAL INFERENCE GUIDELINES:
+- Read between the lines: What are they NOT saying?
+- Detect emotional undertones and hidden concerns
+- Infer readiness levels based on language patterns
+- Estimate future trajectories based on current attitudes
+- Consider philosophical orientation influences on metrics
+- Account for seasonal farming patterns in time series
+
+Return JSON with sophisticated inferential analysis:
 {
-  "themes": ["theme1", "theme2", "theme3"],
+  "themes": ["3-5 key themes extracted from conversation"],
   "dairyMetrics": {
-    "feedCostPressure": [12 numbers 0-1],
-    "sustainabilityInterest": [12 numbers 0-1], 
-    "climateAdaptation": [12 numbers 0-1],
-    "technologyReadiness": [12 numbers 0-1],
-    "communityEngagement": [12 numbers 0-1]
+    "feedCostPressure": [12 monthly values 0-1],
+    "sustainabilityInterest": [12 monthly values 0-1], 
+    "climateAdaptation": [12 monthly values 0-1],
+    "technologyReadiness": [12 monthly values 0-1],
+    "communityEngagement": [12 monthly values 0-1]
   },
-  "insights": "Practical farming insights addressing the farmer directly with actionable advice",
-  "nextSteps": ["step1", "step2", "step3"]
+  "insights": "Deep insights addressing psychological patterns, hidden motivations, and systemic thinking",
+  "nextSteps": ["3-4 strategic next steps based on inferential analysis"]
 }
 
-REQUIREMENTS:
-1. Focus on dairy farming themes: feed costs, pasture management, emissions, sustainability practices, technology adoption, climate adaptation
-2. Provide 12-point time series (representing months) for each metric
-3. Give practical, actionable insights specific to dairy farming
-4. Suggest concrete next steps the farmer can take`;
+INFERENTIAL ANALYSIS TECHNIQUES:
+1. **Language Analysis**: Hesitation words, certainty markers, emotional indicators
+2. **Contradiction Detection**: Where stated values conflict with implied priorities
+3. **Readiness Assessment**: How prepared they are for change based on conversation patterns
+4. **Systems Thinking**: Evidence of interconnected vs. linear thinking
+5. **Time Orientation**: Past-focused, present-focused, or future-focused language
+6. **Risk Tolerance**: Implied from language about uncertainty and change
+7. **Social Dynamics**: References to family, community, peer influence
+8. **Economic Mindset**: Cost sensitivity, investment readiness, ROI thinking
+
+TIME SERIES INFERENCE RULES:
+- Start values based on current state indicators
+- Middle values show seasonal patterns + trend direction
+- End values reflect projected outcomes based on attitudes
+- Account for dairy farming seasonality (spring calving, winter feeding, etc.)
+- Higher variance for uncertain/conflicted farmers
+- Smoother curves for confident/decided farmers
+
+EXAMPLE INFERENCES:
+- If farmer mentions "expensive" multiple times → feedCostPressure starts high, may decrease if they show adaptation
+- If excited about "new technology" → technologyReadiness ramps up over time
+- If mentions "community" positively → communityEngagement stays consistently high
+- If worried about "climate" → climateAdaptation starts low but may increase with learning
+- If talks about "sustainability" but hesitates → sustainabilityInterest shows growth curve with initial dip
+
+Make the time series tell a story about this farmer's likely journey based on their psychological profile!`;
 
 export default async function handler(
   req: NextApiRequest,
@@ -133,14 +164,38 @@ RECOMMENDED RESPONSE APPROACH:
 
     const contextualPrompt = `${systemPrompt}
 
-CONTEXT:
+DEEP ANALYSIS CONTEXT FOR INFERENCE:
+
+FARMER ORIENTATION & PSYCHOLOGY:
 - Current orientation: ${currentOrientation}
 - Emotional tone: ${conversationInsights.emotionalTone}
 - Engagement level: ${conversationInsights.overallEngagement}
 - Dominant topics: ${conversationInsights.dominantTopics.join(', ')}
+
 ${philosophicalContext}
 
-Tailor your response to match the farmer's philosophical development level and create intellectually challenging dialogue that promotes growth.`;
+INFERENTIAL INSIGHTS:
+- Philosophical depth: ${(comprehensiveAnalysis.sustainabilityPhilosophy?.philosophicalDepth || 0.5).toFixed(2)} (affects long-term thinking in metrics)
+- Intellectual curiosity: ${(comprehensiveAnalysis.sustainabilityPhilosophy?.intellectualCuriosity || 0.5).toFixed(2)} (affects technology adoption curves)
+- Systemic thinking: ${(comprehensiveAnalysis.sustainabilityPhilosophy?.systemicThinking || 0.5).toFixed(2)} (affects interconnected metric relationships)
+- System resilience: ${(comprehensiveAnalysis.sesAnalysis?.systemResilience || 0.5).toFixed(2)} (affects adaptation speed)
+- Transformation potential: ${(comprehensiveAnalysis.sesAnalysis?.transformationPotential || 0.5).toFixed(2)} (affects future trajectory slopes)
+
+KEY INFERENCES TO APPLY:
+1. **Uncertainty Markers**: ${comprehensiveAnalysis.uncertaintyMarkers?.length || 0} detected - creates variability in metrics
+2. **Avoidance Patterns**: ${comprehensiveAnalysis.avoidancePatterns?.length || 0} detected - may flatten early metric values
+3. **Emotional Drivers**: Primary emotion affects metric intensities
+4. **Value Conflicts**: ${comprehensiveAnalysis.sustainabilityPhilosophy?.valueSystem?.valueConflicts?.length || 0} conflicts create tension patterns in time series
+5. **Dialectical Tensions**: Each tension represents competing forces in the farmer's decision-making
+
+CREATE TIME SERIES THAT REFLECT THIS FARMER'S PSYCHOLOGICAL JOURNEY:
+- Use philosophical depth to determine complexity of patterns
+- Use uncertainty markers to add realistic variability
+- Use emotional drivers to set intensity levels
+- Use system resilience to determine recovery/adaptation speeds
+- Use transformation potential to determine end-state trajectories
+
+The metrics should tell a cohesive story about this specific farmer's sustainability journey based on their psychological profile.`;
 
     log('debug', `[${requestId}] Calling OpenAI GPT-4o-mini with enhanced context...`);
     const completion = await openai.chat.completions.create({
