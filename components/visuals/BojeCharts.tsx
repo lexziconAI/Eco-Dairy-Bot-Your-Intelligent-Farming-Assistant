@@ -94,7 +94,7 @@ export default function BojeCharts({ results }: BojeChartsProps) {
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {bojeData.map((item, index) => (
-            <div key={index} className="bg-gradient-to-br from-bojeGold/10 to-bojeGold/5 rounded-lg p-4 border border-bojeGold/20">
+            <div key={`${item.metric}-${index}`} className="bg-gradient-to-br from-bojeGold/10 to-bojeGold/5 rounded-lg p-4 border border-bojeGold/20">
               <h4 className="font-semibold text-gray-800 mb-4 text-center">{item.metric}</h4>
               
               {/* Story flow visualization */}

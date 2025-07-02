@@ -11,7 +11,8 @@ interface SimpleLineChartProps {
 }
 
 export default function SimpleLineChart({ results, title, emoji, caption, transform }: SimpleLineChartProps) {
-  const seriesEntries = Object.entries(results.series || {});
+  const series = results?.series || results?.dairyMetrics || {};
+  const seriesEntries = Object.entries(series);
   
   if (seriesEntries.length === 0) {
     return (

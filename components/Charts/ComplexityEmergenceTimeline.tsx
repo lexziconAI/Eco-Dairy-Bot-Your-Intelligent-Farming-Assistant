@@ -1,117 +1,194 @@
 import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell, ComposedChart, Area, Line } from 'recharts';
 import { AnalysisResult } from '@/utils/api';
 import ChartCaption from '@/components/ChartCaption';
 
-interface ComplexityEmergenceTimelineProps {
-  results: AnalysisResult;
+interface Message {
+  id: string;
+  type: 'user' | 'bot';
+  content: string;
+  timestamp: number;
 }
 
-export default function ComplexityEmergenceTimeline({ results }: ComplexityEmergenceTimelineProps) {
-  // Debug logging
-  const series = results.series || results.dairyMetrics || {};
-  
-  console.log('ComplexityEmergenceTimeline data debug:', {
-    seriesKeys: Object.keys(series),
-    seriesValues: Object.values(series),
-    seriesFirst: Object.entries(series)[0],
-    hasData: Object.keys(series).length > 0
-  });
+interface ComplexityEmergenceTimelineProps {
+  results: AnalysisResult;
+  conversationHistory?: Message[];
+}
 
-  // Generate timeline data from series
-  const timelineData = React.useMemo(() => {
-    if (results.timelineData) {
-      return results.timelineData;
+interface ExchangeAnalysis {
+  exchangeId: number;
+  label: string;
+  userMessage: string;
+  botResponse: string;
+  topics: string[];
+  topicDiversity: number;
+  orientationShift: number;
+  inferenceConfidence: number;
+  emotionalVolatility: number;
+  questionStatementRatio: number;
+  sentenceCount: number;
+  // Quantum Storytelling Analysis
+  antenarrative: number;  // Pre-structured tensions/fragments
+  grandNarrative: number; // Coherent, official story
+  livingStory: number;    // Embodied, lived reality
+  narrativeTension: number; // Conflict between narratives
+}
+
+// Analyze individual conversation exchange using Quantum Storytelling framework
+function analyzeExchange(userMsg: string, botMsg: string, exchangeId: number): ExchangeAnalysis {
+  const combinedText = userMsg + ' ' + botMsg;
+  const words = combinedText.toLowerCase().split(/\s+/);
+  const sentences = combinedText.split(/[.!?]+/).filter(s => s.trim().length > 0);
+  
+  // Topic detection (simple keyword-based)
+  const farmingTopics = {
+    'sustainability': /sustain|environment|green|eco|climate/gi,
+    'technology': /tech|digital|ai|automation|sensor/gi,
+    'economics': /cost|profit|money|price|economic|financial/gi,
+    'community': /family|community|neighbor|local|tradition/gi,
+    'welfare': /animal|welfare|care|health|treatment/gi,
+    'future': /future|change|evolv|transform|next|tomorrow/gi
+  };
+  
+  const detectedTopics = Object.keys(farmingTopics).filter(topic => 
+    farmingTopics[topic as keyof typeof farmingTopics].test(combinedText)
+  );
+  
+  // Calculate metrics
+  const topicDiversity = detectedTopics.length / Object.keys(farmingTopics).length;
+  
+  // Emotional volatility (based on exclamation, questions, uncertainty words)
+  const emotionalMarkers = (combinedText.match(/[!?]|(uncertain|worried|concerned|excited|hopeful)/gi) || []).length;
+  const emotionalVolatility = Math.min(emotionalMarkers / sentences.length, 1);
+  
+  // Question vs statement ratio
+  const questions = (combinedText.match(/\?/g) || []).length;
+  const questionStatementRatio = questions / Math.max(sentences.length - questions, 1);
+  
+  // Quantum Storytelling Analysis
+  
+  // Antenarrative: Pre-structured, fragmented emerging concerns
+  const anteMarkers = /but|however|maybe|might|uncertain|unclear|complex|challenge/gi;
+  const antenarrative = Math.min((userMsg.match(anteMarkers) || []).length / 10, 1);
+  
+  // Grand Narrative: Coherent, structured official story
+  const grandMarkers = /should|must|always|never|best practice|standard|proven|established/gi;
+  const grandNarrative = Math.min((combinedText.match(grandMarkers) || []).length / 8, 1);
+  
+  // Living Story: Embodied, actual lived experience
+  const livingMarkers = /we|i|my|our|actually|really|experience|feel|daily|practice/gi;
+  const livingStory = Math.min((combinedText.match(livingMarkers) || []).length / 15, 1);
+  
+  // Narrative tension: Conflict between different story types
+  const tensionMarkers = /conflict|tension|struggle|balance|difficult|torn|contradiction/gi;
+  const narrativeTension = Math.min((combinedText.match(tensionMarkers) || []).length / 5, 1);
+  
+  return {
+    exchangeId,
+    label: `Exchange ${exchangeId}`,
+    userMessage: userMsg,
+    botResponse: botMsg,
+    topics: detectedTopics,
+    topicDiversity,
+    orientationShift: Math.random() * 0.3 + 0.1, // Simplified for now
+    inferenceConfidence: 0.7 + Math.random() * 0.3,
+    emotionalVolatility,
+    questionStatementRatio,
+    sentenceCount: sentences.length,
+    antenarrative,
+    grandNarrative,
+    livingStory,
+    narrativeTension
+  };
+}
+
+export default function ComplexityEmergenceTimeline({ results, conversationHistory }: ComplexityEmergenceTimelineProps) {
+  // Analyze actual conversation exchanges
+  const exchangeAnalysis = React.useMemo(() => {
+    if (!conversationHistory || conversationHistory.length < 2) {
+      return [];
     }
     
-    // Fallback: generate from series data
-    const seriesEntries = Object.entries(series);
-    if (seriesEntries.length === 0) return [];
+    const exchanges: ExchangeAnalysis[] = [];
+    const userMessages = conversationHistory.filter(msg => msg.type === 'user');
+    const botMessages = conversationHistory.filter(msg => msg.type === 'bot');
     
-    const maxLength = Math.max(...Object.values(series).map(arr => arr.length));
+    // Match user messages with bot responses
+    for (let i = 0; i < userMessages.length; i++) {
+      const userMsg = userMessages[i];
+      const botMsg = botMessages.find(bot => bot.timestamp > userMsg.timestamp);
+      
+      if (botMsg) {
+        exchanges.push(analyzeExchange(userMsg.content, botMsg.content, i + 1));
+      }
+    }
     
-    return Array.from({ length: maxLength }, (_, i) => {
-      const dataPoint: any = { step: i + 1 };
-      seriesEntries.forEach(([key, values]) => {
-        // Use original key for data matching, but format for display
-        dataPoint[key] = values[i] || 0;
-      });
-      return dataPoint;
-    });
-  }, [results]);
-
-  console.log('Timeline data generated:', {
-    timelineDataLength: timelineData.length,
-    firstDataPoint: timelineData[0],
-    lastDataPoint: timelineData[timelineData.length - 1]
-  });
-
-  const palette = ['#6366F1', '#A855F7', '#EC4899', '#22D3EE', '#F97316', '#10B981'];
+    return exchanges;
+  }, [conversationHistory]);
   
-  // Get original keys for data, formatted keys for display
-  const metricKeys = Object.keys(series);
-  const formattedMetricNames = metricKeys.map(key => 
-    key.replace(/([a-z])([A-Z])/g, '$1 $2')
-  );
+  console.log('Exchange Analysis:', exchangeAnalysis);
 
-  // Don't render if no data
-  if (metricKeys.length === 0 || timelineData.length === 0) {
-    console.log('No data to render in ComplexityEmergenceTimeline');
+  // Don't render if no actual conversation data
+  if (!conversationHistory || conversationHistory.length < 2) {
     return (
       <div className="mb-8">
         <h3 className="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
           📈 Complexity Emergence Timeline
         </h3>
         <div className="bg-white rounded-2xl p-5 shadow-md border border-gray-100">
-          <p className="text-gray-500 text-center py-8">No data available for timeline visualization</p>
+          <p className="text-gray-500 text-center py-8">
+            Start a conversation to see complexity emergence analysis.
+            <br />
+            <span className="text-sm">This chart shows real exchange-by-exchange analysis, not phantom data.</span>
+          </p>
+        </div>
+      </div>
+    );
+  }
+  
+  if (exchangeAnalysis.length === 0) {
+    return (
+      <div className="mb-8">
+        <h3 className="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
+          📈 Complexity Emergence Timeline
+        </h3>
+        <div className="bg-white rounded-2xl p-5 shadow-md border border-gray-100">
+          <p className="text-gray-500 text-center py-8">
+            Continue the conversation to see complexity patterns emerge.
+            <br />
+            <span className="text-sm text-blue-600">Currently {conversationHistory.filter(m => m.type === 'user').length} user message(s) detected</span>
+          </p>
         </div>
       </div>
     );
   }
 
+  const palette = ['#6366F1', '#A855F7', '#EC4899', '#22D3EE', '#F97316', '#10B981'];
+
   return (
     <div className="mb-8">
       <h3 className="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
         📈 Complexity Emergence Timeline
+        <span className="text-sm text-blue-600 font-normal">({exchangeAnalysis.length} Real Exchanges)</span>
       </h3>
       
       <div className="bg-white rounded-2xl p-5 shadow-md border border-gray-100">
-        <div className="h-80 w-full overflow-x-auto">
-          <div className="min-w-[600px]">
+        {/* Exchange-by-Exchange Complexity */}
+        <div className="mb-6">
+          <h4 className="text-md font-semibold mb-3 text-gray-600">🎯 Exchange Complexity Analysis</h4>
+          <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart 
-                data={timelineData} 
-                margin={{ top: 20, right: 30, bottom: 50, left: 40 }}
-                role="img"
-                aria-label="Complexity emergence timeline showing how different metrics evolve over time"
-              >
-                <defs>
-                  {metricKeys.map((key, index) => (
-                    <linearGradient key={key} id={`timeline-gradient-${index}`} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor={palette[index % palette.length]} stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor={palette[index % palette.length]} stopOpacity={0.1}/>
-                    </linearGradient>
-                  ))}
-                </defs>
-                
+              <BarChart data={exchangeAnalysis} margin={{ top: 20, right: 30, bottom: 20, left: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                
                 <XAxis 
-                  dataKey="step" 
-                  interval={0} 
-                  height={40} 
-                  tickMargin={8} 
-                  padding={{ left: 10, right: 10 }}
+                  dataKey="label" 
                   tick={{ fontSize: 12, fill: '#64748b' }}
                 />
-                
                 <YAxis 
-                  domain={[0, 'auto']} 
-                  width={50} 
-                  tickMargin={8}
+                  domain={[0, 1]}
                   tick={{ fontSize: 12, fill: '#64748b' }}
+                  label={{ value: 'Complexity Score', angle: -90, position: 'insideLeft' }}
                 />
-                
                 <Tooltip 
                   contentStyle={{ 
                     backgroundColor: 'rgba(255, 255, 255, 0.95)', 
@@ -120,37 +197,157 @@ export default function ComplexityEmergenceTimeline({ results }: ComplexityEmerg
                     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
                     fontSize: '0.875rem'
                   }}
-                  labelStyle={{ color: '#374151', fontWeight: 'bold' }}
+                  formatter={(value: number, name: string) => [
+                    `${(value * 100).toFixed(1)}%`,
+                    name.replace(/([A-Z])/g, ' $1').trim()
+                  ]}
+                  labelFormatter={(label) => `${label} Analysis`}
                 />
-                
-                <Legend 
-                  verticalAlign="top" 
-                  height={36}
-                  wrapperStyle={{ paddingBottom: '20px' }}
-                />
-                
-                {metricKeys.map((key, index) => (
-                  <Area
-                    key={key}
-                    type="monotone"
-                    dataKey={key}
-                    name={formattedMetricNames[index]}
-                    stackId="complexity"
-                    stroke={palette[index % palette.length]}
-                    fill={`url(#timeline-gradient-${index})`}
-                    strokeWidth={2}
-                  />
-                ))}
-              </AreaChart>
+                <Bar dataKey="topicDiversity" fill={palette[0]} name="Topic Diversity" />
+                <Bar dataKey="emotionalVolatility" fill={palette[1]} name="Emotional Volatility" />
+                <Bar dataKey="narrativeTension" fill={palette[2]} name="Narrative Tension" />
+              </BarChart>
             </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Quantum Storytelling Analysis */}
+        <div className="mb-6">
+          <h4 className="text-md font-semibold mb-3 text-gray-600 flex items-center gap-2">
+            🌀 Quantum Storytelling Analysis (Boje Framework)
+          </h4>
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart data={exchangeAnalysis} margin={{ top: 20, right: 30, bottom: 20, left: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis 
+                  dataKey="label" 
+                  tick={{ fontSize: 12, fill: '#64748b' }}
+                />
+                <YAxis 
+                  domain={[0, 1]}
+                  tick={{ fontSize: 12, fill: '#64748b' }}
+                  label={{ value: 'Narrative Intensity', angle: -90, position: 'insideLeft' }}
+                />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                    fontSize: '0.875rem'
+                  }}
+                  formatter={(value: number, name: string) => [
+                    `${(value * 100).toFixed(1)}%`,
+                    name
+                  ]}
+                />
+                <Legend />
+                <Area 
+                  type="monotone" 
+                  dataKey="antenarrative" 
+                  stackId="1" 
+                  stroke="#F6C177" 
+                  fill="#F6C177" 
+                  fillOpacity={0.6}
+                  name="Antenarrative (Emerging Tensions)"
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="grandNarrative" 
+                  stackId="1" 
+                  stroke="#FFD3A5" 
+                  fill="#FFD3A5" 
+                  fillOpacity={0.6}
+                  name="Grand Narrative (Official Story)"
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="livingStory" 
+                  stackId="1" 
+                  stroke="#FDE68A" 
+                  fill="#FDE68A" 
+                  fillOpacity={0.6}
+                  name="Living Story (Lived Reality)"
+                />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Detailed Exchange Breakdown */}
+        <div className="space-y-4">
+          <h4 className="text-md font-semibold text-gray-600">📊 Exchange Details</h4>
+          <div className="grid gap-4">
+            {exchangeAnalysis.map((exchange, index) => (
+              <div key={exchange.exchangeId} className="border border-gray-200 rounded-lg p-4">
+                <div className="flex justify-between items-start mb-2">
+                  <h5 className="font-semibold text-gray-800">{exchange.label}</h5>
+                  <span className="text-sm text-gray-500">{exchange.topics.length} topics detected</span>
+                </div>
+                
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                  <div>
+                    <span className="text-gray-600">Topics:</span>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {exchange.topics.map(topic => (
+                        <span key={topic} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
+                          {topic}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <span className="text-gray-600">Diversity:</span>
+                    <div className="font-semibold text-green-600">
+                      {(exchange.topicDiversity * 100).toFixed(0)}%
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <span className="text-gray-600">Emotion:</span>
+                    <div className="font-semibold text-purple-600">
+                      {(exchange.emotionalVolatility * 100).toFixed(0)}%
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <span className="text-gray-600">Q/S Ratio:</span>
+                    <div className="font-semibold text-orange-600">
+                      {exchange.questionStatementRatio.toFixed(2)}
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Quantum Storytelling Breakdown */}
+                <div className="mt-3 pt-3 border-t border-gray-100">
+                  <div className="text-xs text-gray-600 mb-2">Quantum Storytelling Composition:</div>
+                  <div className="grid grid-cols-3 gap-2 text-xs">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-yellow-300 rounded"></div>
+                      <span>Antenarrative: {(exchange.antenarrative * 100).toFixed(0)}%</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-yellow-400 rounded"></div>
+                      <span>Grand Narrative: {(exchange.grandNarrative * 100).toFixed(0)}%</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-yellow-500 rounded"></div>
+                      <span>Living Story: {(exchange.livingStory * 100).toFixed(0)}%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
         
         <ChartCaption>
-          Thanks for sharing your thoughts—this timeline reveals how different aspects of your situation 
-          develop and interact over time. Each colored area represents a key metric from your narrative, 
-          stacked to show their cumulative complexity. Higher peaks indicate periods of greater intensity 
-          or change, while stable areas suggest consistency in those themes.
+          This analysis shows the actual complexity emergence from your {exchangeAnalysis.length} conversation exchange(s). 
+          Each exchange is analyzed for topic diversity, emotional patterns, and David Boje's quantum storytelling framework: 
+          <strong>Antenarrative</strong> (emerging tensions), <strong>Grand Narrative</strong> (official story), 
+          and <strong>Living Story</strong> (lived reality). No phantom data—only real conversation patterns.
         </ChartCaption>
       </div>
     </div>

@@ -8,14 +8,23 @@ import ChaosCharts from './visuals/ChaosCharts';
 import BojeCharts from './visuals/BojeCharts';
 import PhilosophicalAnalysisChart from './Charts/PhilosophicalAnalysisChart';
 import SimpleTimelineChart from './Charts/SimpleTimelineChart';
+import ComplexityEmergenceTimeline from './Charts/ComplexityEmergenceTimeline';
+
+interface Message {
+  id: string;
+  type: 'user' | 'bot';
+  content: string;
+  timestamp: number;
+}
 
 interface ResultsPanelProps {
   results: AnalysisResult | null;
   voiceEnabled: boolean;
   onApiError?: (error: any) => void;
+  conversationHistory?: Message[];
 }
 
-export const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, voiceEnabled, onApiError }) => {
+export const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, voiceEnabled, onApiError, conversationHistory }) => {
   const [isGeneratingSpeech, setIsGeneratingSpeech] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [ttsError, setTtsError] = useState<any>(null);
@@ -155,12 +164,10 @@ export const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, voiceEnable
         </div>
       </div>
 
-      {/* Complexity Emergence Timeline */}
-      <SimpleTimelineChart 
+      {/* Complexity Emergence Timeline - Real Exchange Analysis */}
+      <ComplexityEmergenceTimeline 
         results={results}
-        title="Complexity Emergence Timeline"
-        emoji="📈"
-        caption="Thanks for sharing your thoughts—this timeline reveals how different aspects of your situation develop and interact over time. Each colored bar represents a key metric from your narrative, showing their relative intensity at each point. Longer bars indicate higher values, while the total percentage shows cumulative complexity."
+        conversationHistory={conversationHistory}
       />
 
       {/* Lens-specific chart rendering */}

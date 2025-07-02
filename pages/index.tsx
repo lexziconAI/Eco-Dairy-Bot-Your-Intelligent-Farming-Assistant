@@ -16,6 +16,7 @@ interface Message {
 export default function Home() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [results, setResults] = useState<AnalysisResult | null>(null);
+  const [currentConversation, setCurrentConversation] = useState<Message[]>([]);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
@@ -47,6 +48,7 @@ export default function Home() {
 
   const handleAnalyze = async (conversationHistory: Message[]) => {
     setIsAnalyzing(true);
+    setCurrentConversation(conversationHistory); // Store current conversation
     try {
       // Combine all user messages for analysis
       const userMessages = conversationHistory.filter(msg => msg.type === 'user');
@@ -128,6 +130,7 @@ export default function Home() {
             results={results} 
             voiceEnabled={voiceEnabled} 
             onApiError={handleApiError}
+            conversationHistory={currentConversation}
           />
         )}
       </div>
