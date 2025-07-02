@@ -77,6 +77,11 @@ export function transformMetricsForLens(series: Record<string, number[]>, lens: 
   
   const entries = Object.entries(series);
   
+  // Return empty if no data
+  if (entries.length === 0) {
+    return [];
+  }
+  
   switch (lens) {
     case 'SES':
       return entries.map(([key, values]) => ({

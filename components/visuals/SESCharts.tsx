@@ -8,7 +8,8 @@ interface SESChartsProps {
 }
 
 export default function SESCharts({ results }: SESChartsProps) {
-  const sesData = transformMetricsForLens(results?.series || {}, 'SES');
+  const series = results?.series || results?.dairyMetrics || {};
+  const sesData = transformMetricsForLens(series, 'SES');
   
   // Create radar chart data
   const radarData = sesData.map(item => ({

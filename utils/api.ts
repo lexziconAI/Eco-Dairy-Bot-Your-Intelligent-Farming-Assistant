@@ -37,9 +37,27 @@ export async function transcribeAudio(audioBlob: Blob): Promise<string> {
 
 export interface AnalysisResult {
   themes: string[];
-  series: Record<string, number[]>;
+  series?: Record<string, number[]>; // Legacy field for backward compatibility
+  dairyMetrics?: Record<string, number[]>; // New dairy-specific metrics
   summary?: string;
+  insights?: string; // New field from updated API
+  nextSteps?: string[]; // New field from updated API
   timelineData?: Array<{ step: number; [metric: string]: number }>;
+  // Enhanced analysis fields
+  analysisMetadata?: {
+    sessionId: string;
+    orientation: string;
+    emotionalTone: string;
+    engagementLevel: string;
+    detectedClues: {
+      linguisticMarkers: number;
+      topicPatterns: number;
+      contradictions: number;
+    };
+    timestamp: number;
+  };
+  visualizationData?: any;
+  matrixAnalysis?: any;
 }
 
 export async function analyzeText(text: string): Promise<AnalysisResult> {

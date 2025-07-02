@@ -9,11 +9,13 @@ interface ComplexityEmergenceTimelineProps {
 
 export default function ComplexityEmergenceTimeline({ results }: ComplexityEmergenceTimelineProps) {
   // Debug logging
+  const series = results.series || results.dairyMetrics || {};
+  
   console.log('ComplexityEmergenceTimeline data debug:', {
-    seriesKeys: Object.keys(results.series || {}),
-    seriesValues: Object.values(results.series || {}),
-    seriesFirst: Object.entries(results.series || {})[0],
-    hasData: Object.keys(results.series || {}).length > 0
+    seriesKeys: Object.keys(series),
+    seriesValues: Object.values(series),
+    seriesFirst: Object.entries(series)[0],
+    hasData: Object.keys(series).length > 0
   });
 
   // Generate timeline data from series
@@ -23,10 +25,10 @@ export default function ComplexityEmergenceTimeline({ results }: ComplexityEmerg
     }
     
     // Fallback: generate from series data
-    const seriesEntries = Object.entries(results?.series || {});
+    const seriesEntries = Object.entries(series);
     if (seriesEntries.length === 0) return [];
     
-    const maxLength = Math.max(...Object.values(results?.series || {}).map(arr => arr.length));
+    const maxLength = Math.max(...Object.values(series).map(arr => arr.length));
     
     return Array.from({ length: maxLength }, (_, i) => {
       const dataPoint: any = { step: i + 1 };
@@ -47,7 +49,7 @@ export default function ComplexityEmergenceTimeline({ results }: ComplexityEmerg
   const palette = ['#6366F1', '#A855F7', '#EC4899', '#22D3EE', '#F97316', '#10B981'];
   
   // Get original keys for data, formatted keys for display
-  const metricKeys = Object.keys(results?.series || {});
+  const metricKeys = Object.keys(series);
   const formattedMetricNames = metricKeys.map(key => 
     key.replace(/([a-z])([A-Z])/g, '$1 $2')
   );

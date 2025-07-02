@@ -11,7 +11,8 @@ interface SimpleTimelineChartProps {
 
 export default function SimpleTimelineChart({ results, title, emoji, caption }: SimpleTimelineChartProps) {
   // Extract and validate data
-  const seriesEntries = Object.entries(results.series || {});
+  const series = results.series || results.dairyMetrics || {};
+  const seriesEntries = Object.entries(series);
   
   if (seriesEntries.length === 0) {
     return (

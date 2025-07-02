@@ -8,7 +8,8 @@ interface BojeChartsProps {
 }
 
 export default function BojeCharts({ results }: BojeChartsProps) {
-  const bojeData = transformMetricsForLens(results?.series || {}, 'Boje');
+  const series = results?.series || results?.dairyMetrics || {};
+  const bojeData = transformMetricsForLens(series, 'Boje');
   
   // Create narrative flow data (Sankey-like representation)
   const narrativeFlowData = bojeData.map((item, index) => ({
@@ -31,7 +32,7 @@ export default function BojeCharts({ results }: BojeChartsProps) {
   const timelineData = Array.from({ length: 30 }, (_, i) => {
     const dataPoint: any = { time: i + 1 };
     
-    Object.entries(results?.series || {}).forEach(([key, values]) => {
+    Object.entries(series).forEach(([key, values]) => {
       const metricName = key.replace(/([a-z])([A-Z])/g, '$1 $2');
       // Divide timeline into three narrative phases
       if (i < 10) {

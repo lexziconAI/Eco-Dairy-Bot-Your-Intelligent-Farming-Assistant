@@ -10,7 +10,8 @@ interface ChaosChartsProps {
 }
 
 export default function ChaosCharts({ results }: ChaosChartsProps) {
-  const chaosData = transformMetricsForLens(results?.series || {}, 'Chaos');
+  const series = results?.series || results?.dairyMetrics || {};
+  const chaosData = transformMetricsForLens(series, 'Chaos');
 
   // Transform function for divergence calculation
   const calculateDivergence = (values: number[], index: number) => {
