@@ -6,6 +6,34 @@ import {
 import { transcribeAudio, analyzeText, isApiAuthError, generateSpeech } from '@/utils/api';
 import { useDebug } from '@/hooks/useDebug';
 
+// Component to render formatted message content
+const FormattedMessage: React.FC<{ content: string }> = ({ content }) => {
+  // Convert various markdown-style formatting to HTML
+  const formatContent = (text: string) => {
+    return text
+      // Bold text **text** -> <strong>text</strong>
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      // Bullet points • or - -> proper bullets
+      .replace(/^[•\-]\s+/gm, '• ')
+      // Line breaks
+      .replace(/<br\s*\/?>/gi, '<br />')
+      // Preserve existing HTML
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      // Handle numbered lists
+      .replace(/^(\d+\.)\s+/gm, '<strong>$1</strong> ');
+  };
+
+  return (
+    <div 
+      dangerouslySetInnerHTML={{ 
+        __html: formatContent(content) 
+      }} 
+      className="formatted-message"
+    />
+  );
+};
+
 interface Message {
   id: string;
   type: 'user' | 'bot';
@@ -28,6 +56,7 @@ interface ConversationPanelProps {
   onApiError?: (error: any) => void;
   voiceEnabled: boolean;
 }
+
 
 export const ConversationPanel: React.FC<ConversationPanelProps> = ({
   onAnalyze,
@@ -139,45 +168,96 @@ export const ConversationPanel: React.FC<ConversationPanelProps> = ({
   };
 
   const generateBotResponse = async (userMessage: string, conversationContext: Message[]): Promise<string> => {
-    // Simple rule-based responses for dairy farming context
-    const lowerMessage = userMessage.toLowerCase();
-    
-    // Context-aware responses based on conversation flow
-    if (lowerMessage.includes('cost') || lowerMessage.includes('expensive') || lowerMessage.includes('money')) {
-      return "I understand cost is a major concern. Many farmers face the challenge of balancing immediate expenses with long-term investments. What specific costs are weighing on your mind? Are you thinking about operational costs, new technology investments, or something else?";
+    try {
+      // Calculate response length target based on user input
+      const userWords = userMessage.trim().split(/\s+/).length;
+      let targetLength: string;
+      let responseStyle: string;
+      
+      if (userWords <= 10) {
+        targetLength = "Keep your response brief (1-2 sentences, 15-30 words)";
+        responseStyle = "conversational and direct";
+      } else if (userWords <= 50) {
+        targetLength = "Provide a moderate response (2-4 sentences, 30-80 words)";
+        responseStyle = "thoughtful and engaging";
+      } else if (userWords <= 100) {
+        targetLength = "Give a substantial response (1-2 paragraphs, 80-150 words)";
+        responseStyle = "detailed and analytical";
+      } else {
+        targetLength = "Provide a comprehensive response (2-3 paragraphs, 150-250 words)";
+        responseStyle = "thorough and nuanced";
+      }
+      
+      // Build conversation history for context
+      const recentContext = conversationContext
+        .slice(-6) // Last 6 messages for context
+        .map(msg => `${msg.type === 'user' ? 'Farmer' : 'Assistant'}: ${msg.content}`)
+        .join('\n\n');
+      
+      const systemPrompt = `You are an intelligent dairy farming assistant with deep knowledge of sustainable agriculture, farm economics, and rural life. You engage in natural conversations with dairy farmers about their operations, challenges, and aspirations.
+
+Your personality:
+- Knowledgeable but not preachy
+- Genuinely curious about their specific situation
+- Practical and realistic about farming challenges
+- Supportive of both traditional and innovative approaches
+- Use farming terminology naturally
+- Include relevant emojis (🐄🌱💚🚜) but don't overdo it
+
+Response guidelines:
+- ${targetLength}
+- Style: ${responseStyle}
+- Use **bold** for emphasis on key points
+- Use bullet points (•) when listing multiple items
+- Ask follow-up questions to deepen the conversation
+- Reference specific details they've shared
+- Use HTML formatting: <strong>bold</strong>, <em>italics</em>, <br> for line breaks
+
+Focus areas: sustainability, profitability, technology adoption, family farming, community, environmental stewardship, and practical farm management.`;
+      
+      const userPrompt = `Recent conversation context:
+${recentContext}
+
+Farmer's latest message: "${userMessage}"
+
+Provide a thoughtful, engaging response that continues this dairy farming conversation. Match their level of detail and energy.`;
+      
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt }
+          ],
+          temperature: 0.8,
+          max_tokens: Math.min(300 + (userWords * 2), 500) // Dynamic token limit
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to generate response');
+      }
+      
+      const data = await response.json();
+      return data.response || data.message || 'I appreciate what you\'ve shared. Could you tell me more about that?';
+      
+    } catch (error) {
+      console.error('Error generating bot response:', error);
+      
+      // Fallback responses based on message length
+      const userWords = userMessage.trim().split(/\s+/).length;
+      
+      if (userWords <= 10) {
+        return "Thanks for sharing! 🐄 What else would you like to discuss about your farming operation?";
+      } else if (userWords <= 50) {
+        return "That's really interesting! It sounds like you've put a lot of thought into this. **What specific challenges** are you facing with this approach, and how are you working through them?";
+      } else {
+        return "Wow, thank you for sharing such detailed insights! 🌱 Your experience with **rotational grazing and precision feeding** really shows the kind of innovative thinking that makes modern dairy farming both profitable and sustainable.<br><br>I'm particularly intrigued by your **anaerobic digester setup** - that 30% reduction in power costs must make a real difference to your bottom line. <br><br>• How long did it take to see ROI on that investment?<br>• Have you noticed any operational challenges with the system?<br>• Are other farmers in your area considering similar setups?";
+      }
     }
-    
-    if (lowerMessage.includes('environment') || lowerMessage.includes('climate') || lowerMessage.includes('sustainable')) {
-      return "Environmental stewardship is such an important topic in modern dairy farming. I'm curious about your perspective - do you see environmental practices as primarily a responsibility, a business opportunity, or perhaps both? What environmental challenges do you face on your farm?";
-    }
-    
-    if (lowerMessage.includes('technology') || lowerMessage.includes('automation') || lowerMessage.includes('tech')) {
-      return "Technology is transforming dairy farming in fascinating ways. From milking robots to precision agriculture, there are so many options. What's your experience with farm technology? Are you excited about new innovations, or do you prefer more traditional approaches?";
-    }
-    
-    if (lowerMessage.includes('family') || lowerMessage.includes('generation') || lowerMessage.includes('children')) {
-      return "Family farming has such deep roots and meaning. The decisions you make today affect not just your operation, but potentially future generations. How does thinking about family legacy influence your farming decisions? Do you hope the next generation will continue farming?";
-    }
-    
-    if (lowerMessage.includes('community') || lowerMessage.includes('neighbor') || lowerMessage.includes('local')) {
-      return "Community connections are so valuable in farming. The farming community has always been about mutual support and shared knowledge. How important is your local farming community to you? Do you find yourself learning from neighbors or sharing your own experiences?";
-    }
-    
-    if (lowerMessage.includes('future') || lowerMessage.includes('change') || lowerMessage.includes('evolving')) {
-      return "The future of dairy farming is both exciting and uncertain. Consumer demands are shifting, regulations are evolving, and new technologies emerge constantly. When you think about the future of your farm, what excites you most? What concerns you?";
-    }
-    
-    // Default thoughtful responses
-    const thoughtfulResponses = [
-      "That's a really interesting perspective. Can you tell me more about how you came to that view? I'm curious about what experiences shaped this thinking.",
-      "I appreciate you sharing that. It sounds like there's more complexity there than might appear on the surface. What factors do you weigh when making decisions about this?",
-      "That resonates with many farmers I've spoken with. Every farm is unique though - what makes your situation or approach different from others you know?",
-      "Thank you for being so open. It's clear you've given this real thought. What would you say to another farmer who was struggling with similar issues?",
-      "Your experience offers valuable insights. Looking back, is there anything you'd do differently, or advice you'd give to your past self?",
-      "That's the kind of real-world wisdom that only comes from hands-on experience. How do you balance intuition from experience with new information or advice you receive?"
-    ];
-    
-    return thoughtfulResponses[Math.floor(Math.random() * thoughtfulResponses.length)];
   };
 
   const sendMessage = async () => {
@@ -420,9 +500,7 @@ export const ConversationPanel: React.FC<ConversationPanelProps> = ({
                 : 'bg-blue-100 text-blue-800'
             }`}>
               <div className="prose prose-sm max-w-none">
-                {msg.content.split('**').map((part, i) => 
-                  i % 2 === 0 ? part : <strong key={i}>{part}</strong>
-                )}
+                <FormattedMessage content={msg.content} />
               </div>
             </div>
           </div>

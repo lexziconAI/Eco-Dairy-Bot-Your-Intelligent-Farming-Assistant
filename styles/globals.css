@@ -110,3 +110,43 @@
 .recharts-legend-wrapper {
   padding-bottom: 10px !important;
 }
+
+/* Formatted message styles for conversation */
+.formatted-message {
+  line-height: 1.6;
+}
+
+.formatted-message strong {
+  @apply font-semibold text-current;
+}
+
+.formatted-message em {
+  @apply italic;
+}
+
+.formatted-message p {
+  @apply mb-2 last:mb-0;
+}
+
+/* Bullet points styling */
+.formatted-message ul {
+  @apply list-none pl-0 space-y-1;
+}
+
+.formatted-message li {
+  @apply flex items-start;
+}
+
+.formatted-message li:before {
+  content: '•';
+  @apply mr-2 text-current opacity-70 flex-shrink-0;
+}
+
+/* Enhanced conversation formatting */
+.formatted-message br {
+  @apply block h-2;
+}
+
+.formatted-message code {
+  @apply bg-gray-100 px-1 py-0.5 rounded text-sm font-mono;
+}
