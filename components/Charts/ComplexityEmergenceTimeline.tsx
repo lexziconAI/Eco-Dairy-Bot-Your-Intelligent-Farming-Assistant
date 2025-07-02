@@ -23,10 +23,10 @@ export default function ComplexityEmergenceTimeline({ results }: ComplexityEmerg
     }
     
     // Fallback: generate from series data
-    const seriesEntries = Object.entries(results.series);
+    const seriesEntries = Object.entries(results?.series || {});
     if (seriesEntries.length === 0) return [];
     
-    const maxLength = Math.max(...Object.values(results.series).map(arr => arr.length));
+    const maxLength = Math.max(...Object.values(results?.series || {}).map(arr => arr.length));
     
     return Array.from({ length: maxLength }, (_, i) => {
       const dataPoint: any = { step: i + 1 };
@@ -47,7 +47,7 @@ export default function ComplexityEmergenceTimeline({ results }: ComplexityEmerg
   const palette = ['#6366F1', '#A855F7', '#EC4899', '#22D3EE', '#F97316', '#10B981'];
   
   // Get original keys for data, formatted keys for display
-  const metricKeys = Object.keys(results.series);
+  const metricKeys = Object.keys(results?.series || {});
   const formattedMetricNames = metricKeys.map(key => 
     key.replace(/([a-z])([A-Z])/g, '$1 $2')
   );
