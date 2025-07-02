@@ -4,7 +4,7 @@ import { ConversationPanel } from '@/components/ConversationPanel';
 import { ResultsPanel } from '@/components/ResultsPanel';
 import { HistoryDrawer, HistoryEntry } from '@/components/HistoryDrawer';
 import { analyzeText, AnalysisResult } from '@/utils/api';
-import { LensSelector } from '@/components/LensSelector';
+import { ResponsiveLayout } from '@/components/ResponsiveLayout';
 
 interface Message {
   id: string;
@@ -116,24 +116,25 @@ export default function Home() {
       hasApiErrors={hasApiErrors}
       onShowApiErrors={() => setShowApiErrorModal(true)}
     >
-      <LensSelector />
-      <div className="space-y-6">
-        <ConversationPanel 
-          onAnalyze={handleAnalyze} 
-          isAnalyzing={isAnalyzing} 
-          onApiError={handleApiError}
-          voiceEnabled={voiceEnabled}
-        />
-        
-        {results && (
-          <ResultsPanel 
-            results={results} 
-            voiceEnabled={voiceEnabled} 
+      <ResponsiveLayout>
+        <div className="space-y-6">
+          <ConversationPanel 
+            onAnalyze={handleAnalyze} 
+            isAnalyzing={isAnalyzing} 
             onApiError={handleApiError}
-            conversationHistory={currentConversation}
+            voiceEnabled={voiceEnabled}
           />
-        )}
-      </div>
+          
+          {results && (
+            <ResultsPanel 
+              results={results} 
+              voiceEnabled={voiceEnabled} 
+              onApiError={handleApiError}
+              conversationHistory={currentConversation}
+            />
+          )}
+        </div>
+      </ResponsiveLayout>
       
       <HistoryDrawer
         history={history}

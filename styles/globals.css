@@ -150,3 +150,48 @@
 .formatted-message code {
   @apply bg-gray-100 px-1 py-0.5 rounded text-sm font-mono;
 }
+
+/* Mobile-first responsive layout fixes */
+@media (max-width: 768px) {
+  /* Ensure content doesn't get covered by floating elements */
+  .main-content-area {
+    padding-bottom: 100px !important;
+  }
+  
+  /* Ensure no horizontal scroll */
+  body, html {
+    overflow-x: hidden;
+  }
+  
+  /* Make sure charts are mobile-friendly */
+  .recharts-wrapper {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  
+  /* Ensure conversation panel is mobile-optimized */
+  .conversation-panel {
+    margin-bottom: 20px;
+  }
+}
+
+/* Prevent layout shift when Theory Lens opens on tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .main-content-area {
+    transition: margin-right 0.3s ease;
+  }
+}
+
+/* Desktop layout optimizations */
+@media (min-width: 1025px) {
+  /* Remove any mobile spacing */
+  .main-content-area {
+    padding-bottom: 0 !important;
+  }
+  
+  /* Ensure theory lens doesn't overlap */
+  .theory-lens-sidebar {
+    position: relative !important;
+    transform: none !important;
+  }
+}
