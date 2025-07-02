@@ -4,7 +4,7 @@ import { useDebug } from '@/hooks/useDebug';
 import { useLens } from '@/hooks/useLens';
 import { LENSES } from '@/utils/lenses';
 import SESCharts from './visuals/SESCharts';
-import ChaosCharts from './visuals/ChaosCharts';
+import ChaosChartsFixed from './visuals/ChaosChartsFixed';
 import BojeCharts from './visuals/BojeCharts';
 import PhilosophicalAnalysisChart from './Charts/PhilosophicalAnalysisChart';
 import SimpleTimelineChart from './Charts/SimpleTimelineChart';
@@ -47,7 +47,7 @@ export const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, voiceEnable
 
   const chartByLens = {
     SES: <SESCharts results={results} />,
-    Chaos: <ChaosCharts results={results} />,
+    Chaos: <ChaosChartsFixed results={results} conversationHistory={conversationHistory} />,
     Boje: <BojeCharts results={results} />,
     Philosophy: <PhilosophicalAnalysisChart data={results.comprehensiveAnalysis} title="Philosophical & Systems Analysis" />,
   };
@@ -166,7 +166,6 @@ export const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, voiceEnable
 
       {/* Complexity Emergence Timeline - Real Exchange Analysis */}
       <ComplexityEmergenceTimeline 
-        results={results}
         conversationHistory={conversationHistory}
       />
 
