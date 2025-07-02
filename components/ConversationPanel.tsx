@@ -238,7 +238,9 @@ Provide a thoughtful, engaging response that continues this dairy farming conver
       });
       
       if (!response.ok) {
-        throw new Error('Failed to generate response');
+        const errorData = await response.text();
+        console.error('Chat API error:', response.status, errorData);
+        throw new Error(`Chat API failed: ${response.status} - ${errorData}`);
       }
       
       const data = await response.json();
@@ -247,6 +249,14 @@ Provide a thoughtful, engaging response that continues this dairy farming conver
     } catch (error) {
       console.error('Error generating bot response:', error);
       
+      // Log detailed error information
+      if (error instanceof Error) {
+        console.error('Error details:', {
+          message: error.message,
+          stack: error.stack
+        });
+      }
+      
       // Fallback responses based on message length
       const userWords = userMessage.trim().split(/\s+/).length;
       
@@ -254,8 +264,10 @@ Provide a thoughtful, engaging response that continues this dairy farming conver
         return "Thanks for sharing! 🐄 What else would you like to discuss about your farming operation?";
       } else if (userWords <= 50) {
         return "That's really interesting! It sounds like you've put a lot of thought into this. **What specific challenges** are you facing with this approach, and how are you working through them?";
+      } else if (userWords <= 100) {
+        return "Thank you for that detailed perspective! Your thinking clearly goes beyond just the technical aspects of farming. **What specific farming practices** does this philosophy lead you toward, and how do you see it playing out in your day-to-day operations?";
       } else {
-        return "Wow, thank you for sharing such detailed insights! 🌱 Your experience with **rotational grazing and precision feeding** really shows the kind of innovative thinking that makes modern dairy farming both profitable and sustainable.<br><br>I'm particularly intrigued by your **anaerobic digester setup** - that 30% reduction in power costs must make a real difference to your bottom line. <br><br>• How long did it take to see ROI on that investment?<br>• Have you noticed any operational challenges with the system?<br>• Are other farmers in your area considering similar setups?";
+        return "Thank you for sharing such a comprehensive perspective! That's a fascinating theological and economic framework for thinking about environmental stewardship. <br><br>Your emphasis on **human flourishing first** and the role of **prosperity in enabling conservation** raises really important questions about development priorities. <br><br>• How do you see this philosophy applying specifically to dairy farming practices?<br>• What role do you think modern agricultural technology should play in this framework?<br>• How do you balance immediate productivity needs with longer-term stewardship goals on your operation?";
       }
     }
   };
