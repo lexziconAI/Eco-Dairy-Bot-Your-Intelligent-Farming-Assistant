@@ -1,0 +1,27 @@
+
+> simusense-ai@0.1.0 dev
+> node server.js
+
+> Server ready on http://0.0.0.0:3000
+
+> Also available on:
+  http://172.30.112.61:3000
+
+> Environment:
+  NODE_ENV: development
+  API Keys configured: ✓ OpenAI, ✓ ElevenLabs
+ ○ Compiling / ...
+ ✓ Compiled / in 888ms (949 modules)
+ GET / 200 in 1187ms
+ GET / 200 in 14ms
+ ✓ Compiled /api/analyze in 161ms (272 modules)
+[d1c4158b-85d0-464a-865a-24879369840b] /api/analyze START
+[d1c4158b-85d0-464a-865a-24879369840b] API key present: true
+[d1c4158b-85d0-464a-865a-24879369840b] Analyzing text { contentLength: 3568, ip: '127.0.0.1' }
+[d1c4158b-85d0-464a-865a-24879369840b] Calling OpenAI GPT-4o-mini for faster response...
+[d1c4158b-85d0-464a-865a-24879369840b] Raw response: {
+  "themes": ["emotional turmoil", "connection versus isolation", "ethical conflict", "personal ambition", "the search for grounding"],
+  "series": {
+    "emotionalTension": [0.8, 0.9, 0.7, 0.6, 0.95
+[d1c4158b-85d0-464a-865a-24879369840b] OK { ms: 9975, themesCount: 5, seriesCount: 3 }
+ POST /api/analyze 200 in 10217ms

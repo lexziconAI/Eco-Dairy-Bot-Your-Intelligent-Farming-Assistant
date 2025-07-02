@@ -1,0 +1,500 @@
+
+> simusense-ai@0.1.0 dev
+> node server.js
+
+> Server ready on http://0.0.0.0:3000
+
+> Also available on:
+  http://172.30.112.61:3000
+
+> Environment:
+  NODE_ENV: development
+  API Keys configured: ✓ OpenAI, ✓ ElevenLabs
+ ○ Compiling /test ...
+ ✓ Compiled /test in 1799ms (263 modules)
+ GET /test 200 in 1881ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1764ms (882 modules)
+ GET / 200 in 1571ms
+ ✓ Compiled /api/analyze in 62ms (242 modules)
+[a4ee40a2-714c-4d2b-b2d3-fc2ccc67208f] /api/analyze START
+[a4ee40a2-714c-4d2b-b2d3-fc2ccc67208f] API key present: true
+[a4ee40a2-714c-4d2b-b2d3-fc2ccc67208f] Analyzing text { contentLength: 4, ip: '127.0.0.1' }
+[a4ee40a2-714c-4d2b-b2d3-fc2ccc67208f] Calling OpenAI GPT-4...
+[a4ee40a2-714c-4d2b-b2d3-fc2ccc67208f] Using fallback JSON parsing (no enforced response_format)
+[a4ee40a2-714c-4d2b-b2d3-fc2ccc67208f] Raw response: {
+  "themes": [ "communication", "greeting", "interaction" ],
+  "series": {
+    "communicationIntensity": [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.2, 0.2, 0.2, 0.2, 0.2, 0.3, 0.3, 0.3, 0.3
+[a4ee40a2-714c-4d2b-b2d3-fc2ccc67208f] OK { ms: 28866, themesCount: 3, seriesCount: 3 }
+ POST /api/analyze 200 in 28976ms
+ ✓ Compiled /api/tts in 72ms (243 modules)
+[d4767fdf-087c-4163-911f-211e98f45f89] /api/tts START
+[d4767fdf-087c-4163-911f-211e98f45f89] API key present: true
+[d4767fdf-087c-4163-911f-211e98f45f89] Generating speech { textLength: 424, voiceId: 'EXAVITQu4vr4xnSDxMaL', ip: '127.0.0.1' }
+[d4767fdf-087c-4163-911f-211e98f45f89] Calling ElevenLabs TTS API...
+[d4767fdf-087c-4163-911f-211e98f45f89] OK { ms: 5355, audioSize: 438902 }
+ POST /api/tts 200 in 5533ms
+ ✓ Compiled in 240ms (878 modules)
+ ✓ Compiled in 220ms (878 modules)
+ ✓ Compiled in 125ms (878 modules)
+ ✓ Compiled in 145ms (878 modules)
+ ✓ Compiled /api/analyze in 207ms (240 modules)
+[78efa901-58e5-4e17-a1dc-1b70a875e279] /api/analyze START
+[78efa901-58e5-4e17-a1dc-1b70a875e279] API key present: true
+[78efa901-58e5-4e17-a1dc-1b70a875e279] Analyzing text { contentLength: 1899, ip: '127.0.0.1' }
+[78efa901-58e5-4e17-a1dc-1b70a875e279] Calling OpenAI GPT-4...
+[78efa901-58e5-4e17-a1dc-1b70a875e279] Using fallback JSON parsing (no enforced response_format)
+ ✓ Compiled in 128ms (656 modules)
+ GET / 200 in 74ms
+ POST /api/analyze 200 in 25446ms
+[3f672c9b-471a-4427-a643-b143d2ef77e1] /api/analyze START
+[3f672c9b-471a-4427-a643-b143d2ef77e1] API key present: true
+[3f672c9b-471a-4427-a643-b143d2ef77e1] Analyzing text { contentLength: 1898, ip: '127.0.0.1' }
+[3f672c9b-471a-4427-a643-b143d2ef77e1] Calling OpenAI GPT-4...
+[3f672c9b-471a-4427-a643-b143d2ef77e1] Using fallback JSON parsing (no enforced response_format)
+[78efa901-58e5-4e17-a1dc-1b70a875e279] Raw response: {
+  "themes": [ "insomnia", "anxiety-induced productivity", "hydroponic project management", "communication breakdown", "pressure of responsibility" ],
+  "series": {
+    "insomniaSeverity": [0.2, 0.3,
+[78efa901-58e5-4e17-a1dc-1b70a875e279] OK { ms: 46074, themesCount: 5, seriesCount: 5 }
+ ✓ Compiled /debug-mic in 464ms (900 modules)
+ReferenceError: navigator is not defined
+    at DebugMic (webpack-internal:///./pages/debug-mic.tsx:74:29)
+    at renderWithHooks (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5658:16)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5732:15)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5786:7)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5786:7)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderNode (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6270:12)
+ ⨯ pages/debug-mic.tsx (39:37) @ navigator
+ ⨯ ReferenceError: navigator is not defined
+    at DebugMic (webpack-internal:///./pages/debug-mic.tsx:74:29)
+    at renderWithHooks (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5658:16)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5732:15)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5786:7)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5786:7)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderNode (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6270:12) {
+  page: '/debug-mic'
+}
+[0m [90m 37 |[39m       [33m<[39m[33mdiv[39m style[33m=[39m{{ marginBottom[33m:[39m [32m'20px'[39m[33m,[39m padding[33m:[39m [32m'15px'[39m[33m,[39m backgroundColor[33m:[39m [32m'#f5f5f5'[39m[33m,[39m borderRadius[33m:[39m [32m'8px'[39m }}[33m>[39m[0m
+[0m [90m 38 |[39m         [33m<[39m[33mh2[39m[33m>[39m[33mBrowser[39m [33mSupport[39m[33m<[39m[33m/[39m[33mh2[39m[33m>[39m[0m
+[0m[31m[1m>[22m[39m[90m 39 |[39m         [33m<[39m[33mp[39m[33m>[39m[33mMediaDevices[39m supported[33m:[39m {navigator[33m.[39mmediaDevices [33m?[39m [32m'✅ Yes'[39m [33m:[39m [32m'❌ No'[39m}[33m<[39m[33m/[39m[33mp[39m[33m>[39m[0m
+[0m [90m    |[39m                                     [31m[1m^[22m[39m[0m
+[0m [90m 40 |[39m         [33m<[39m[33mp[39m[33m>[39mgetUserMedia supported[33m:[39m {navigator[33m.[39mmediaDevices[33m?[39m[33m.[39mgetUserMedia [33m?[39m [32m'✅ Yes'[39m [33m:[39m [32m'❌ No'[39m}[33m<[39m[33m/[39m[33mp[39m[33m>[39m[0m
+[0m [90m 41 |[39m         [33m<[39m[33mp[39m[33m>[39m[33mMediaRecorder[39m supported[33m:[39m {window[33m.[39m[33mMediaRecorder[39m [33m?[39m [32m'✅ Yes'[39m [33m:[39m [32m'❌ No'[39m}[33m<[39m[33m/[39m[33mp[39m[33m>[39m[0m
+[0m [90m 42 |[39m         [33m<[39m[33mp[39m[33m>[39m[33mCurrent[39m [33mURL[39m[33m:[39m {window[33m.[39mlocation[33m.[39mhref}[33m<[39m[33m/[39m[33mp[39m[33m>[39m[0m
+ ✓ Compiled /_error in 86ms (902 modules)
+ GET /debug-mic 500 in 648ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 11ms
+[3f672c9b-471a-4427-a643-b143d2ef77e1] Raw response: {
+  "themes": [ "stress management", "project management", "hydroponics technology", "communication issues", "personal worries"],
+  "series": {
+    "stressIndex": [0.6, 0.7, 0.8, 0.85, 0.9, 0.95, 0.95
+[3f672c9b-471a-4427-a643-b143d2ef77e1] OK { ms: 38080, themesCount: 5, seriesCount: 5 }
+ POST /api/analyze 200 in 38119ms
+
+Could not open debug-mic.tsx in the editor.
+The editor process exited with an error: Terminal editors can only be used on macOS.
+
+To set up the editor integration, add something like REACT_EDITOR=atom to the .env.local file in your project folder and restart the development server.
+
+
+Could not open debug-mic.tsx in the editor.
+The editor process exited with an error: Terminal editors can only be used on macOS.
+
+To set up the editor integration, add something like REACT_EDITOR=atom to the .env.local file in your project folder and restart the development server.
+
+ ✓ Compiled in 211ms (880 modules)
+ ✓ Compiled /debug-mic in 101ms (884 modules)
+ReferenceError: navigator is not defined
+    at DebugMic (webpack-internal:///./pages/debug-mic.tsx:78:29)
+    at renderWithHooks (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5658:16)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5732:15)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5786:7)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5786:7)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderNode (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6270:12)
+ReferenceError: navigator is not defined
+    at DebugMic (webpack-internal:///./pages/debug-mic.tsx:78:29)
+    at renderWithHooks (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5658:16)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5732:15)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5786:7)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5786:7)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderNode (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6270:12)
+ ⨯ pages/debug-mic.tsx (44:37) @ navigator
+ ⨯ ReferenceError: navigator is not defined
+    at DebugMic (webpack-internal:///./pages/debug-mic.tsx:78:29)
+    at renderWithHooks (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5658:16)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5732:15)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5786:7)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5786:7)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderNode (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6270:12) {
+  page: '/debug-mic'
+}
+[0m [90m 42 |[39m       [33m<[39m[33mdiv[39m style[33m=[39m{{ marginBottom[33m:[39m [32m'20px'[39m[33m,[39m padding[33m:[39m [32m'15px'[39m[33m,[39m backgroundColor[33m:[39m [32m'#f5f5f5'[39m[33m,[39m borderRadius[33m:[39m [32m'8px'[39m }}[33m>[39m[0m
+[0m [90m 43 |[39m         [33m<[39m[33mh2[39m[33m>[39m[33mBrowser[39m [33mSupport[39m[33m<[39m[33m/[39m[33mh2[39m[33m>[39m[0m
+[0m[31m[1m>[22m[39m[90m 44 |[39m         [33m<[39m[33mp[39m[33m>[39m[33mMediaDevices[39m supported[33m:[39m {navigator[33m.[39mmediaDevices [33m?[39m [32m'✅ Yes'[39m [33m:[39m [32m'❌ No'[39m}[33m<[39m[33m/[39m[33mp[39m[33m>[39m[0m
+[0m [90m    |[39m                                     [31m[1m^[22m[39m[0m
+[0m [90m 45 |[39m         [33m<[39m[33mp[39m[33m>[39mgetUserMedia supported[33m:[39m {navigator[33m.[39mmediaDevices[33m?[39m[33m.[39mgetUserMedia [33m?[39m [32m'✅ Yes'[39m [33m:[39m [32m'❌ No'[39m}[33m<[39m[33m/[39m[33mp[39m[33m>[39m[0m
+[0m [90m 46 |[39m         [33m<[39m[33mp[39m[33m>[39m[33mMediaRecorder[39m supported[33m:[39m {window[33m.[39m[33mMediaRecorder[39m [33m?[39m [32m'✅ Yes'[39m [33m:[39m [32m'❌ No'[39m}[33m<[39m[33m/[39m[33mp[39m[33m>[39m[0m
+[0m [90m 47 |[39m         [33m<[39m[33mp[39m[33m>[39m[33mCurrent[39m [33mURL[39m[33m:[39m {window[33m.[39mlocation[33m.[39mhref}[33m<[39m[33m/[39m[33mp[39m[33m>[39m[0m
+ ⨯ pages/debug-mic.tsx (44:37) @ navigator
+ ⨯ ReferenceError: navigator is not defined
+    at DebugMic (webpack-internal:///./pages/debug-mic.tsx:78:29)
+    at renderWithHooks (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5658:16)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5732:15)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5786:7)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderIndeterminateComponent (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5786:7)
+    at renderElement (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:5957:7)
+    at renderNodeDestructiveImpl (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6115:11)
+    at renderNodeDestructive (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6087:14)
+    at renderNode (/root/projects/kinetichat/node_modules/react-dom/cjs/react-dom-server.browser.development.js:6270:12) {
+  page: '/debug-mic'
+}
+[0m [90m 42 |[39m       [33m<[39m[33mdiv[39m style[33m=[39m{{ marginBottom[33m:[39m [32m'20px'[39m[33m,[39m padding[33m:[39m [32m'15px'[39m[33m,[39m backgroundColor[33m:[39m [32m'#f5f5f5'[39m[33m,[39m borderRadius[33m:[39m [32m'8px'[39m }}[33m>[39m[0m
+[0m [90m 43 |[39m         [33m<[39m[33mh2[39m[33m>[39m[33mBrowser[39m [33mSupport[39m[33m<[39m[33m/[39m[33mh2[39m[33m>[39m[0m
+[0m[31m[1m>[22m[39m[90m 44 |[39m         [33m<[39m[33mp[39m[33m>[39m[33mMediaDevices[39m supported[33m:[39m {navigator[33m.[39mmediaDevices [33m?[39m [32m'✅ Yes'[39m [33m:[39m [32m'❌ No'[39m}[33m<[39m[33m/[39m[33mp[39m[33m>[39m[0m
+[0m [90m    |[39m                                     [31m[1m^[22m[39m[0m
+[0m [90m 45 |[39m         [33m<[39m[33mp[39m[33m>[39mgetUserMedia supported[33m:[39m {navigator[33m.[39mmediaDevices[33m?[39m[33m.[39mgetUserMedia [33m?[39m [32m'✅ Yes'[39m [33m:[39m [32m'❌ No'[39m}[33m<[39m[33m/[39m[33mp[39m[33m>[39m[0m
+[0m [90m 46 |[39m         [33m<[39m[33mp[39m[33m>[39m[33mMediaRecorder[39m supported[33m:[39m {window[33m.[39m[33mMediaRecorder[39m [33m?[39m [32m'✅ Yes'[39m [33m:[39m [32m'❌ No'[39m}[33m<[39m[33m/[39m[33mp[39m[33m>[39m[0m
+[0m [90m 47 |[39m         [33m<[39m[33mp[39m[33m>[39m[33mCurrent[39m [33mURL[39m[33m:[39m {window[33m.[39mlocation[33m.[39mhref}[33m<[39m[33m/[39m[33mp[39m[33m>[39m[0m
+ GET /debug-mic 500 in 81ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 8ms
+ GET / 200 in 52ms
+ ✓ Compiled in 170ms (884 modules)
+ ✓ Compiled in 153ms (884 modules)
+ GET /debug-mic 200 in 15ms
+ GET /debug-mic 200 in 18ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 11ms
+ ✓ Compiled /api/analyze in 121ms (243 modules)
+[7a78de62-4486-4d59-8cc4-845919260768] /api/analyze START
+[7a78de62-4486-4d59-8cc4-845919260768] API key present: true
+[7a78de62-4486-4d59-8cc4-845919260768] Analyzing text { contentLength: 1829, ip: '127.0.0.1' }
+[7a78de62-4486-4d59-8cc4-845919260768] Calling OpenAI GPT-4...
+[7a78de62-4486-4d59-8cc4-845919260768] Using fallback JSON parsing (no enforced response_format)
+[7a78de62-4486-4d59-8cc4-845919260768] Raw response: {
+  "themes": [ "Anticipation", "Desire", "Intimacy", "Nervousness", "Time"],
+  "series": {
+    "Anticipation": [0.9, 0.91, 0.92, 0.95, 0.97, 0.98, 0.99, 1, 0.99, 0.98, 0.97, 0.95, 0.92, 0.91, 0.9, 0.
+[7a78de62-4486-4d59-8cc4-845919260768] OK { ms: 44330, themesCount: 5, seriesCount: 5 }
+ POST /api/analyze 200 in 44460ms
+ ✓ Compiled /api/tts in 175ms (243 modules)
+[56fd375e-ffec-450a-81a5-adb607a18e61] /api/tts START
+[56fd375e-ffec-450a-81a5-adb607a18e61] API key present: true
+[56fd375e-ffec-450a-81a5-adb607a18e61] Generating speech { textLength: 468, voiceId: 'EXAVITQu4vr4xnSDxMaL', ip: '127.0.0.1' }
+[56fd375e-ffec-450a-81a5-adb607a18e61] Calling ElevenLabs TTS API...
+[56fd375e-ffec-450a-81a5-adb607a18e61] OK { ms: 6135, audioSize: 475264 }
+ POST /api/tts 200 in 6343ms
+ GET / 200 in 69ms
+ ✓ Compiled /api/transcribe in 58ms (246 modules)
+[c893b90f-c8eb-4eef-a088-25afd84a24f9] /api/transcribe START
+[c893b90f-c8eb-4eef-a088-25afd84a24f9] API key present: true
+[c893b90f-c8eb-4eef-a088-25afd84a24f9] Processing audio { payloadSize: 113763, ip: '127.0.0.1' }
+[c893b90f-c8eb-4eef-a088-25afd84a24f9] Audio buffer created { bufferSize: 85304 }
+[c893b90f-c8eb-4eef-a088-25afd84a24f9] Calling ElevenLabs STT API...
+[c893b90f-c8eb-4eef-a088-25afd84a24f9] OK { ms: 1074, textLength: 39 }
+ POST /api/transcribe 200 in 1144ms
+ ✓ Compiled in 486ms (883 modules)
+ ✓ Compiled in 243ms (883 modules)
+ ✓ Compiled in 241ms (883 modules)
+ ✓ Compiled in 104ms (658 modules)
+ ✓ Compiled in 97ms (658 modules)
+ ✓ Compiled in 104ms (658 modules)
+ ✓ Compiled in 158ms (883 modules)
+ ✓ Compiled /api/analyze in 123ms (243 modules)
+[60e24074-de5b-48a5-888c-27859f1640ed] /api/analyze START
+[60e24074-de5b-48a5-888c-27859f1640ed] API key present: true
+[60e24074-de5b-48a5-888c-27859f1640ed] Analyzing text { contentLength: 39, ip: '127.0.0.1' }
+[60e24074-de5b-48a5-888c-27859f1640ed] Calling OpenAI GPT-4o-mini for faster response...
+[60e24074-de5b-48a5-888c-27859f1640ed] Raw response: {
+  "themes": ["privacy", "surveillance", "trust"],
+  "series": {
+    "metric1": [0.1, 0.3, 0.2, 0.5, 0.4, 0.6, 0.7, 0.1, 0.3, 0.2, 0.5, 0.4, 0.6, 0.8, 0.9, 0.3, 0.2, 0.4, 0.5, 0.1, 0.2, 0.3, 0.6, 0.7
+[60e24074-de5b-48a5-888c-27859f1640ed] OK { ms: 11050, themesCount: 3, seriesCount: 3 }
+ POST /api/analyze 200 in 11187ms
+ ✓ Compiled in 282ms (658 modules)
+ ✓ Compiled in 260ms (883 modules)
+ ✓ Compiled in 280ms (658 modules)
+ ✓ Compiled in 269ms (883 modules)
+ ✓ Compiled in 92ms (883 modules)
+ ✓ Compiled in 165ms (658 modules)
+ ✓ Compiled in 129ms (658 modules)
+ ✓ Compiled in 185ms (658 modules)
+ ✓ Compiled in 187ms (658 modules)
+ ✓ Compiled in 240ms (658 modules)
+ ⨯ ./components/visuals/SESCharts.tsx
+Error: 
+  [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/root/projects/kinetichat/components/visuals/SESCharts.tsx[0m:26:1]
+ [2m26[0m |   };
+ [2m27[0m | 
+ [2m28[0m |   return (
+ [2m29[0m |     <div className="space-y-8">
+    : [31;1m     ^^^[0m
+ [2m30[0m |       {/* Socio-Ecological Balance Radar */}
+ [2m31[0m |       <div className="chart-container">
+ [2m32[0m |         <h3 className="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/visuals/SESCharts.tsx
+./components/ResultsPanel.tsx
+ ⨯ ./pages/index.tsx
+Error: 
+  [31mx[0m Expected unicode escape
+   ,-[[36;1;4m/root/projects/kinetichat/pages/index.tsx[0m:3:1]
+ [2m3[0m | import { BrainDumpPanel } from '@/components/BrainDumpPanel';
+ [2m4[0m | import { ResultsPanel } from '@/components/ResultsPanel';
+ [2m5[0m | import { HistoryDrawer, HistoryEntry } from '@/components/HistoryDrawer';
+ [2m6[0m | import { analyzeText, AnalysisResult } from '@/utils/api';\nimport { LensSelector } from '@/components/LensSelector';
+   : [31;1m                                                          ^[0m
+ [2m7[0m | 
+ [2m8[0m | export default function Home() {
+ [2m9[0m |   const [isAnalyzing, setIsAnalyzing] = useState(false);
+   `----
+
+Caused by:
+    Syntax Error
+ ⨯ ./components/visuals/SESCharts.tsx
+Error: 
+  [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/root/projects/kinetichat/components/visuals/SESCharts.tsx[0m:26:1]
+ [2m26[0m |   };
+ [2m27[0m | 
+ [2m28[0m |   return (
+ [2m29[0m |     <div className="space-y-8">
+    : [31;1m     ^^^[0m
+ [2m30[0m |       {/* Socio-Ecological Balance Radar */}
+ [2m31[0m |       <div className="chart-container">
+ [2m32[0m |         <h3 className="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/visuals/SESCharts.tsx
+./components/ResultsPanel.tsx
+ ⨯ ./components/visuals/SESCharts.tsx
+Error: 
+  [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/root/projects/kinetichat/components/visuals/SESCharts.tsx[0m:26:1]
+ [2m26[0m |   };
+ [2m27[0m | 
+ [2m28[0m |   return (
+ [2m29[0m |     <div className="space-y-8">
+    : [31;1m     ^^^[0m
+ [2m30[0m |       {/* Socio-Ecological Balance Radar */}
+ [2m31[0m |       <div className="chart-container">
+ [2m32[0m |         <h3 className="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/visuals/SESCharts.tsx
+./components/ResultsPanel.tsx
+ ⨯ ./components/visuals/SESCharts.tsx
+Error: 
+  [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/root/projects/kinetichat/components/visuals/SESCharts.tsx[0m:26:1]
+ [2m26[0m |   };
+ [2m27[0m | 
+ [2m28[0m |   return (
+ [2m29[0m |     <div className="space-y-8">
+    : [31;1m     ^^^[0m
+ [2m30[0m |       {/* Socio-Ecological Balance Radar */}
+ [2m31[0m |       <div className="chart-container">
+ [2m32[0m |         <h3 className="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/visuals/SESCharts.tsx
+./components/ResultsPanel.tsx
+ GET / 500 in 936ms
+ ○ Compiling /_error ...
+ ⨯ ./components/visuals/SESCharts.tsx
+Error: 
+  [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/root/projects/kinetichat/components/visuals/SESCharts.tsx[0m:26:1]
+ [2m26[0m |   };
+ [2m27[0m | 
+ [2m28[0m |   return (
+ [2m29[0m |     <div className="space-y-8">
+    : [31;1m     ^^^[0m
+ [2m30[0m |       {/* Socio-Ecological Balance Radar */}
+ [2m31[0m |       <div className="chart-container">
+ [2m32[0m |         <h3 className="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/visuals/SESCharts.tsx
+./components/ResultsPanel.tsx
+./pages/index.tsx
+ GET /debug-mic 200 in 112ms
+ ⨯ ./components/visuals/SESCharts.tsx
+Error: 
+  [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/root/projects/kinetichat/components/visuals/SESCharts.tsx[0m:26:1]
+ [2m26[0m |   };
+ [2m27[0m | 
+ [2m28[0m |   return (
+ [2m29[0m |     <div className="space-y-8">
+    : [31;1m     ^^^[0m
+ [2m30[0m |       {/* Socio-Ecological Balance Radar */}
+ [2m31[0m |       <div className="chart-container">
+ [2m32[0m |         <h3 className="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/visuals/SESCharts.tsx
+./components/ResultsPanel.tsx
+ GET /_next/static/webpack/2d77dc1a88ca0a06.webpack.hot-update.json 500 in 278ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET / 500 in 189ms
+ GET /debug-mic 500 in 58ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /_next/static/webpack/14d661b74058efc7.webpack.hot-update.json 500 in 13ms
+ GET / 500 in 18ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 500 in 9ms
+ ⨯ ./components/visuals/SESCharts.tsx
+Error: 
+  [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/root/projects/kinetichat/components/visuals/SESCharts.tsx[0m:26:1]
+ [2m26[0m |   };
+ [2m27[0m | 
+ [2m28[0m |   return (
+ [2m29[0m |     <div className="space-y-8">
+    : [31;1m     ^^^[0m
+ [2m30[0m |       {/* Socio-Ecological Balance Radar */}
+ [2m31[0m |       <div className="chart-container">
+ [2m32[0m |         <h3 className="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/visuals/SESCharts.tsx
+./components/ResultsPanel.tsx
+ GET / 500 in 8ms
+ ✓ Compiled / in 855ms (955 modules)
+ GET /_next/static/webpack/2d77dc1a88ca0a06.webpack.hot-update.json 500 in 366ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /_next/static/webpack/2d77dc1a88ca0a06.webpack.hot-update.json 404 in 22ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 78ms
+ GET /debug-mic 200 in 11ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 10ms
+ ✓ Compiled in 415ms (955 modules)
+ ✓ Compiled /api/analyze in 154ms (275 modules)
+[bdc95cb3-3b7e-4163-a3a8-5314ab842437] /api/analyze START
+[bdc95cb3-3b7e-4163-a3a8-5314ab842437] API key present: true
+[bdc95cb3-3b7e-4163-a3a8-5314ab842437] Analyzing text { contentLength: 1898, ip: '127.0.0.1' }
+[bdc95cb3-3b7e-4163-a3a8-5314ab842437] Calling OpenAI GPT-4o-mini for faster response...
+[bdc95cb3-3b7e-4163-a3a8-5314ab842437] Raw response: {
+  "themes": [
+    "Community Resilience",
+    "Volunteering and Sacrifice",
+    "Resourcefulness in Crisis",
+    "Emotional Burden of Care",
+    "Adaptation and Innovation"
+  ],
+  "series": {
+    "m
+[bdc95cb3-3b7e-4163-a3a8-5314ab842437] OK { ms: 10369, themesCount: 5, seriesCount: 3 }
+ POST /api/analyze 200 in 10534ms
+ ✓ Compiled /api/tts in 135ms (275 modules)
+[abb5f7c3-bd18-422a-ace9-e5f379cef3f8] /api/tts START
+[abb5f7c3-bd18-422a-ace9-e5f379cef3f8] API key present: true
+[abb5f7c3-bd18-422a-ace9-e5f379cef3f8] Generating speech { textLength: 361, voiceId: 'EXAVITQu4vr4xnSDxMaL', ip: '127.0.0.1' }
+[abb5f7c3-bd18-422a-ace9-e5f379cef3f8] Calling ElevenLabs TTS API...
+[abb5f7c3-bd18-422a-ace9-e5f379cef3f8] OK { ms: 4587, audioSize: 362415 }
+ POST /api/tts 200 in 4746ms
+ ✓ Compiled in 196ms (697 modules)
+ ✓ Compiled /api/analyze in 56ms (275 modules)
+[e4cbb953-c273-4a27-b01a-6e7ed60a107b] /api/analyze START
+[e4cbb953-c273-4a27-b01a-6e7ed60a107b] API key present: true
+[e4cbb953-c273-4a27-b01a-6e7ed60a107b] Analyzing text { contentLength: 68, ip: '127.0.0.1' }
+[e4cbb953-c273-4a27-b01a-6e7ed60a107b] Calling OpenAI GPT-4o-mini for faster response...
+[e4cbb953-c273-4a27-b01a-6e7ed60a107b] Raw response: {
+  "themes": ["stress at work", "excitement for opportunities"],
+  "series": {
+    "stressLevel": [0.6, 0.65, 0.7, 0.5, 0.55, 0.4, 0.75, 0.8, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.8, 0.75, 0.6, 0.55, 0.
+[e4cbb953-c273-4a27-b01a-6e7ed60a107b] OK { ms: 11244, themesCount: 2, seriesCount: 3 }
+ POST /api/analyze 200 in 11309ms
+ ✓ Compiled /_error in 309ms (955 modules)
+ GET / 404 in 409ms
+ GET /_next/static/chunks/main.js 404 in 22ms
+ GET /_next/static/chunks/react-refresh.js 404 in 20ms
+ GET /_next/static/chunks/pages/_app.js 404 in 13ms
+ GET /_next/static/chunks/pages/_error.js 404 in 17ms
+ GET / 404 in 7ms
+ GET /_next/static/chunks/main.js 404 in 6ms
+ GET /_next/static/chunks/react-refresh.js 404 in 4ms
+ GET /_next/static/chunks/pages/_app.js 404 in 7ms
+ GET /_next/static/chunks/pages/_error.js 404 in 5ms
+Terminated
